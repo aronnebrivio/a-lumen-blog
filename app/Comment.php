@@ -10,9 +10,27 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
 class Comment extends Model
 {
+    /* attributes */
     protected $fillable = [
         'text',
+        'id_post',
     ];
-
+    protected $guarded = [
+        'id',
+        'id_user',
+        'created_at',
+        'updated_at',
+    ];
     protected $table = 'comments';
+
+    /* relationships */
+    public function post()
+    {
+        return $this->belongsTo('App\Post', 'id_post');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'id_user');
+    }
 }

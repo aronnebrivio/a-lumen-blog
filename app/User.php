@@ -12,13 +12,28 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 {
     use Authenticatable, Authorizable;
 
+    /* attributes */
     protected $fillable = [
         'email',
     ];
-
     protected $hidden = [
         'password',
     ];
-
+    protected $guarded = [
+        'id',
+        'created_at',
+        'updated_at',
+    ];
     protected $table = 'users';
+
+    /* relationships */
+    public function posts()
+    {
+        return $this->hasMany('App\Post', 'id_user');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany('App\Comment', 'id_user');
+    }
 }
