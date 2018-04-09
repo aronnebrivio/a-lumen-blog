@@ -8,17 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class Post extends Model
 {
-    use Authenticatable, Authorizable;
-
     protected $fillable = [
-        'email',
+        'text',
     ];
 
-    protected $hidden = [
-        'password',
-    ];
-
-    protected $table = 'users';
+    protected $table = 'posts'
 }
