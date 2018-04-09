@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ExampleController;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,6 +13,4 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
-});
+$router->get('/', ExampleController::class . '@test');
