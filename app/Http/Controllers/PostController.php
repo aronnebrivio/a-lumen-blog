@@ -14,6 +14,7 @@ class PostController extends Controller
 
     public function getAll()
     {
+        //return response()->json(Post::all(), 400);
         return Post::all();
     }
 
