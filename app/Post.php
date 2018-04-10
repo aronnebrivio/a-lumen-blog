@@ -16,18 +16,18 @@ class Post extends Model
     ];
     protected $guarded = [
         'id',
-        'id_user',
+        'user_id',
     ];
     protected $table = 'posts';
 
     /* relationships */
     public function comments()
     {
-        return $this->hasMany('App\Comment', 'id_post');
+        return $this->hasMany('App\Comment', 'post_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'id_user');
+        return $this->belongsTo('App\User', 'post_id');
     }
 }

@@ -2,44 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function test(Request $request)
+    public function get($id)
     {
-        if($request->filled("password", "email")) {
-            $input = $request->all();
+        return User::find($id);
+    }
 
-            /* insert */
-            $user = new User;
-            $user->email = rand(1,300);
-            $user->password = $input["password"];
-            $user->save();
-
-            /* update */
-            $user = User::find(1);
-            $user->fill(["email" => $input["email"], "password" => "lalala"]);
-            //$user->created_at = date('Y-m-d H:i:s');
-            $user->save();
-        }
-
+    public function getAll()
+    {
         return User::all();
     }
 
-    public function test2(Request $request, $id)
+    public function new(Request $request)
+    {
+        /* insert */
+        $user = new User;
+        $user->fill($request->all());
+        $user->save();
+    }
+
+    public function update(Request $request, $id)
     {
         $user = User::find($id);
-
-        if($request->filled("password", "email")) {
-            $input = $request->all();
-
-            /* update */
-            $user->fill(["email" => $input["email"], "password" => $input["password"]]);
-            $user->save();
-        }
-
+        /* update */
+        $user->fill($request->all());
+        $user->save();
         return $user;
     }
 }

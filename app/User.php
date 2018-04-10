@@ -27,11 +27,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /* relationships */
     public function posts()
     {
-        return $this->hasMany('App\Post', 'id_user');
+        return $this->hasMany('App\Post', 'user_id');
     }
 
     public function comments()
     {
-        return $this->hasMany('App\Comment', 'id_user');
+        return $this->hasMany('App\Comment', 'user_id');
     }
 }

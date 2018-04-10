@@ -13,11 +13,11 @@ class Comment extends Model
     /* attributes */
     protected $fillable = [
         'text',
-        'id_post',
+        'post_id',
     ];
     protected $guarded = [
         'id',
-        'id_user',
+        'user_id',
         'created_at',
         'updated_at',
     ];
@@ -26,11 +26,11 @@ class Comment extends Model
     /* relationships */
     public function post()
     {
-        return $this->belongsTo('App\Post', 'id_post');
+        return $this->belongsTo('App\Post', 'post_id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User', 'id_user');
+        return $this->belongsTo('App\User', 'user_id');
     }
 }

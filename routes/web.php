@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +18,16 @@ use App\Http\Controllers\UserController;
 
 $router->get('/', ExampleController::class . '@test');
 
-$router->get('/users', UserController::class . '@test');
+/* get */
+$router->get('/users', UserController::class . '@getAll');
+$router->get('/user/{id}', UserController::class . '@get');
 
-$router->get('/user/{id}', UserController::class . '@test2');
+$router->get('/posts', PostController::class . '@getAll');
+$router->get('/post/{id}', PostController::class . '@get');
+
+$router->get('/comments', CommentController::class . '@getAll');
+$router->get('/comment/{id}', CommentController::class . '@get');
+
+/* new post-comment */
+$router->post('/post/new', PostController::class . '@new');
+$router->post('/comment/new', CommentController::class . '@new');
