@@ -7,14 +7,10 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function get($id)
+    public function getAll(Request $request)
     {
-        return Comment::find($id);
-    }
-
-    public function getAll()
-    {
-        return Comment::all();
+        $post_id = $request->all()['post_id'];
+        return Comment::where("post_id", $post_id)->get();
     }
 
     public function new(Request $request)

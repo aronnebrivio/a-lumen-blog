@@ -22,7 +22,7 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $this->get('/post/' . $post->id)
+        $this->get('/posts/' . $post->id)
             ->seeStatusCode(200)
             ->seeJsonEquals($post->toArray());
         $this->seeInDatabase('posts', $post->toArray());
