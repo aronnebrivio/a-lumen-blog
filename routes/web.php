@@ -20,5 +20,6 @@ $router->group(['prefix' => 'posts'], function () use ($router) {
 
 $router->group(['prefix' => 'comments'], function () use ($router) {
     $router->get('/', CommentController::class . '@getAll');
+    $router->get('/{id}', CommentController::class . '@getAllByPostId');
     $router->post('/', CommentController::class . '@new');
 });
