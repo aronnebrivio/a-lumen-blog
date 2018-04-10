@@ -10,7 +10,7 @@ class CommentController extends Controller
     public function getAll(Request $request)
     {
         $post_id = $request->all()['post_id'];
-        return Comment::where("post_id", $post_id)->get();
+        return Comment::where('post_id', $post_id)->get();
     }
 
     public function new(Request $request)

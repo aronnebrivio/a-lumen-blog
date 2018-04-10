@@ -13,7 +13,7 @@ class Comment extends TestCase
             'post_id' => $post->id
         ]);
 
-        $this->get('/comments/?post_id=' . $post->id)
+        $this->json('GET','/comments/', ['post_id' => $post->id])
             ->seeStatusCode(200)
             ->seeJsonEquals([$comment->toArray()]);
         $this->seeInDatabase('comments', $comment->toArray());

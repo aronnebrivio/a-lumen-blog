@@ -23,7 +23,7 @@ class PostController extends Controller
         /* insert */
         $post = new Post;
         $post->fill($request->all());
-        $post->user_id = $request["user_id"];
+        $post->user_id = $request['user_id'];
         $post->save();
     }
 
