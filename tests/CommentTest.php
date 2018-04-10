@@ -16,6 +16,11 @@ class Comment extends TestCase
         $this->json('GET','/comments/', ['post_id' => $post->id])
             ->seeStatusCode(200)
             ->seeJsonEquals([$comment->toArray()]);
-        $this->seeInDatabase('comments', $comment->toArray());
+    }
+
+    public function testCommentsNotExistingPost()
+    {
+        $this->json('GET','/comments/', ['post_id' => 1])
+            ->seeStatusCode(404);
     }
 }

@@ -12,7 +12,6 @@ class PostTest extends TestCase
         $this->json('GET', '/posts')
             ->seeStatusCode(200)
             ->seeJsonEquals([$post->toArray()]);
-        $this->seeInDatabase('posts', $post->toArray());
     }
 
     public function testGetPost()
@@ -25,6 +24,5 @@ class PostTest extends TestCase
         $this->get('/posts/' . $post->id)
             ->seeStatusCode(200)
             ->seeJsonEquals($post->toArray());
-        $this->seeInDatabase('posts', $post->toArray());
     }
 }
