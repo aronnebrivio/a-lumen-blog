@@ -9,12 +9,15 @@ class PostController extends Controller
 {
     public function get($id)
     {
-        return Post::find($id);
+        $post = Post::find($id);
+        if($post)
+            return $post;
+
+        return response('Post not found', 404);
     }
 
     public function getAll()
     {
-        //return response()->json(Post::all(), 400);
         return Post::all();
     }
 

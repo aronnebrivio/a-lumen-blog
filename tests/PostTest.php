@@ -29,7 +29,6 @@ class PostTest extends TestCase
     public function testGetNotExistingPost()
     {
         $this->get('/posts/' . 1)
-            ->seeStatusCode(404)
-            ->seeJsonEquals($post->toArray());
+            ->seeStatusCode(404);
     }
 }
