@@ -19,7 +19,6 @@ class UserController extends Controller
 
     public function new(Request $request)
     {
-        /* insert */
         $user = new User;
         $user->fill($request->all());
         $user->save();
@@ -28,7 +27,6 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        /* update */
         $user->fill($request->all());
         $user->save();
         return $user;

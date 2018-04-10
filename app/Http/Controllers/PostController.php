@@ -23,7 +23,6 @@ class PostController extends Controller
 
     public function new(Request $request)
     {
-        /* insert */
         $post = new Post;
         $post->fill($request->all());
         $post->user_id = $request['user_id'];
@@ -33,7 +32,6 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::find($id);
-        /* update */
         $post->fill($request->all());
         $post->save();
 
