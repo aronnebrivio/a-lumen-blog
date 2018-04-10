@@ -17,8 +17,6 @@ class Post extends Model
     protected $guarded = [
         'id',
         'id_user',
-        'created_at',
-        'updated_at',
     ];
     protected $table = 'posts';
 

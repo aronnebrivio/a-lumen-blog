@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ExampleController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,3 +15,7 @@ use App\Http\Controllers\ExampleController;
 */
 
 $router->get('/', ExampleController::class . '@test');
+
+$router->get('/users', UserController::class . '@test');
+
+$router->get('/user/{id}', UserController::class . '@test2');
