@@ -8,4 +8,9 @@ class ExampleController extends Controller
     {
         return 1;
     }
+
+    public function testAuth()
+    {
+        return 1;
+    }
 }

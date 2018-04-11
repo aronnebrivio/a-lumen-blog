@@ -22,4 +22,15 @@ class UserTest extends TestCase
         $this->post('/users', ['email' => $email, 'password' => $pwd])
             ->seeStatusCode(409);
     }
+
+    public function testAuth()
+    {
+        $user = factory(App\User::class)->create();
+
+        $this->post('/')
+            ->seeStatusCode(401);
+
+        $this->post('/', [], ['Authorization', $user->token])
+            ->seeStatusCode(200);
+    }
 }
