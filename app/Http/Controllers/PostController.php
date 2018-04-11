@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -31,6 +32,7 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
         $post = Post::find($id);
         $post->fill($request->all());
         $post->save();

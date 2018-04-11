@@ -15,10 +15,16 @@ $router->group(['prefix' => 'users'], function () use ($router) {
 $router->group(['prefix' => 'posts'], function () use ($router) {
     $router->get('/', PostController::class . '@getAll');
     $router->get('/{id}', PostController::class . '@get');
-    $router->post('/', PostController::class . '@new');
 });
 
 $router->group(['prefix' => 'comments'], function () use ($router) {
     $router->get('/', CommentController::class . '@getAll');
     $router->post('/', CommentController::class . '@new');
+});
+
+$router->group(['middleware' => 'auth'], function () use ($router) {
+    $router->group(['prefix' => 'posts'], function () use ($router) {
+        $router->put('/{id}', PostController::class . '@update');
+        $router->post('/', PostController::class . '@new');
+    });
 });

@@ -31,4 +31,29 @@ class PostTest extends TestCase
         $this->get('/posts/' . 1)
             ->seeStatusCode(404);
     }
+
+    function testPostEdit()
+    {
+        $user = factory(App\User::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id
+        ]);
+        $text = str_random(300);
+
+        $this->put('/posts/' . $post->id, ["text" => $text])
+            ->seeStatusCode(401);
+
+        $this->get('/posts/' . $post->id)
+            ->seeStatusCode(200)
+            ->seeJsonEquals($post->toArray());
+
+        $this->actingAs($user);
+        $this->put('/posts/' . $post->id, ["text" => $text])
+            ->seeStatusCode(200);
+
+        $post->text = $text;
+        $this->get('/posts/' . $post->id)
+            ->seeStatusCode(200)
+            ->seeJsonEquals($post->toArray());
+    }
 }
