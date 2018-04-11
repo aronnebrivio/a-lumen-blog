@@ -11,7 +11,7 @@ class PostController extends Controller
     public function get($id)
     {
         $post = Post::find($id);
-        if($post)
+        if ($post)
             return $post;
 
         return response('Post not found', 404);
@@ -34,19 +34,22 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $post = Post::find($id);
+        $post = Post::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
         $post->fill($request->all());
         $post->save();
 
         return $post;
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
         $user = Auth::user();
-        $post = Post::find($id);
-        if($post)
-        {
+        $post = Post::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
+        if ($post) {
             $post->delete();
             return 1;
         }

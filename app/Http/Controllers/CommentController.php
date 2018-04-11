@@ -39,17 +39,21 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         $user = Auth::user();
-        $comment = Comment::find($id);
+        $comment = Comment::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
         $comment->fill($request->all());
         $comment->save();
 
         return $comment;
     }
 
-    public function delete(Request $request, $id)
+    public function delete($id)
     {
         $user = Auth::user();
-        $comment = Comment::find($id);
+        $comment = Comment::where('id', $id)
+            ->where('user_id', $user->id)
+            ->first();
         if($comment)
         {
             $comment->delete();

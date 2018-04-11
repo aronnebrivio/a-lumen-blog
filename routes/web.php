@@ -38,6 +38,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->post('/{id}', UserController::class . '@edit');
+        $router->put('/', UserController::class . '@edit');
     });
 });

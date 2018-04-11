@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -32,9 +33,10 @@ class UserController extends Controller
         return $user;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        $user = User::find($id);
+        $logged = Auth::user();
+        $user = User::find($logged->id);
         $user->fill($request->all());
         $user->save();
         return $user;
