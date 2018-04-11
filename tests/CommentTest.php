@@ -47,4 +47,28 @@ class Comment extends TestCase
 
         $this->seeInDatabase('comments', ['id' => $comment->id, 'text' => $text]);
     }
+
+    function testCommentDelete()
+    {
+        $user = factory(App\User::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id
+        ]);
+        $comment = factory(App\Comment::class)->create([
+            'user_id' => $user->id,
+            'post_id' => $post->id
+        ]);
+
+        $this->delete('/comments/' . $comment->id)
+            ->seeStatusCode(401);
+        $this->seeInDatabase('comments', ['id' => $comment->id]);
+
+        $this->actingAs($user);
+        $this->delete('/comments/' . $comment->id)
+            ->seeStatusCode(200);
+        $this->notSeeInDatabase('comments', ['id' => $comment->id]);
+
+        $this->delete('/comments/' . 1)
+            ->seeStatusCode(404);
+    }
 }

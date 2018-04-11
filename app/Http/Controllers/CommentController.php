@@ -35,4 +35,16 @@ class CommentController extends Controller
 
         return $comment;
     }
+
+    public function delete(Request $request, $id)
+    {
+        $user = Auth::user();
+        $comment = Comment::find($id);
+        if($comment)
+        {
+            $comment->delete();
+            return 1;
+        }
+        return response('Comment not found', 404);
+    }
 }
