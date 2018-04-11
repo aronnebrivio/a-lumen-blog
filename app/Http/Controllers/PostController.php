@@ -24,9 +24,10 @@ class PostController extends Controller
 
     public function new(Request $request)
     {
+        $user = Auth::user();
         $post = new Post;
         $post->fill($request->all());
-        $post->user_id = $request['user_id'];
+        $post->user_id = $user->id;
         $post->save();
     }
 

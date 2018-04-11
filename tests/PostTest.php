@@ -38,18 +38,18 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $text = str_random(300);
+        $newText = str_random(300);
 
-        $this->put('/posts/' . $post->id, ["text" => $text])
+        $this->put('/posts/' . $post->id, ["text" => $newText])
             ->seeStatusCode(401);
 
-        $this->notSeeInDatabase('posts', ['id' => $post->id, 'text' => $text]);
+        $this->notSeeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
 
         $this->actingAs($user);
-        $this->put('/posts/' . $post->id, ["text" => $text])
+        $this->put('/posts/' . $post->id, ["text" => $newText])
             ->seeStatusCode(200);
 
-        $this->seeInDatabase('posts', ['id' => $post->id, 'text' => $text]);
+        $this->seeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
     }
 
     function testPostDelete()
@@ -70,5 +70,20 @@ class PostTest extends TestCase
 
         $this->delete('/posts/' . 1)
             ->seeStatusCode(404);
+    }
+
+    function testPostNew()
+    {
+        $user = factory(App\User::class)->create();
+        $sampleText = str_random(300);
+
+        $this->post('/posts', ['text' => $sampleText])
+            ->seeStatusCode(401);
+        $this->notSeeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
+
+        $this->actingAs($user);
+        $this->post('/posts', ['text' => $sampleText])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
     }
 }
