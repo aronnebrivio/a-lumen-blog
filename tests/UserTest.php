@@ -30,7 +30,7 @@ class UserTest extends TestCase
         $this->post('/')
             ->seeStatusCode(401);
 
-        $this->post('/', [], ['Authorization', $user->token])
+        $this->post('/', [], ['Authentication' => $user->token])
             ->seeStatusCode(200);
     }
 }
