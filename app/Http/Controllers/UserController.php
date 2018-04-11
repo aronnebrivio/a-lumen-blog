@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -20,7 +21,10 @@ class UserController extends Controller
     public function new(Request $request)
     {
         $user = new User;
-        $user->fill($request->all());
+        $data = $request->all();
+        $user->fill($data);
+        $user->password = Hash::make($data['password']);
+        $user->token = str_random(64);
         $user->save();
     }
 

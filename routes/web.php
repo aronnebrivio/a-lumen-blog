@@ -9,6 +9,7 @@ $router->get('/', ExampleController::class . '@test');
 
 $router->group(['prefix' => 'users'], function () use ($router) {
     $router->get('/', UserController::class . '@getAll');
+    $router->post('/', UserController::class . '@new');
     $router->get('/{id}', UserController::class . '@get');
 });
 
@@ -34,5 +35,9 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->put('/{id}', CommentController::class . '@update');
         $router->delete('/{id}', CommentController::class . '@delete');
         $router->post('/', CommentController::class . '@new');
+    });
+
+    $router->group(['prefix' => 'users'], function () use ($router) {
+        $router->post('/{id}', UserController::class . '@edit');
     });
 });
