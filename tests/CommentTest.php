@@ -80,12 +80,12 @@ class Comment extends TestCase
         ]);
         $sampleText = str_random(300);
 
-        $this->post('/comments', ['text' => $sampleText])
+        $this->post('/comments', ['post_id' => $post->id, 'text' => $sampleText])
             ->seeStatusCode(401);
         $this->notSeeInDatabase('comments', ['user_id' => $user->id, 'post_id' => $post->id, 'text' => $sampleText]);
 
         $this->actingAs($user);
-        $this->post('/comments/' . $post->id, ['text' => $sampleText])
+        $this->post('/comments', ['post_id' => $post->id, 'text' => $sampleText])
             ->seeStatusCode(200);
         $this->seeInDatabase('comments', ['user_id' => $user->id, 'post_id' => $post->id, 'text' => $sampleText]);
     }
