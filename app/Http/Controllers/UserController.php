@@ -20,12 +20,16 @@ class UserController extends Controller
 
     public function new(Request $request)
     {
-        $user = new User;
         $data = $request->all();
+        if (User::where('email', $data['email'])->first())
+            return response('Invalid email', 409);
+
+        $user = new User;
         $user->fill($data);
         $user->password = Hash::make($data['password']);
         $user->token = str_random(64);
         $user->save();
+        return $user;
     }
 
     public function update(Request $request, $id)
