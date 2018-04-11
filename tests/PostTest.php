@@ -56,4 +56,24 @@ class PostTest extends TestCase
             ->seeStatusCode(200)
             ->seeJsonEquals($post->toArray());
     }
+
+    function testPostDelete()
+    {
+        $user = factory(App\User::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id
+        ]);
+
+        $this->delete('/posts/' . $post->id)
+            ->seeStatusCode(401);
+        $this->seeInDatabase('posts', ['id' => $post->id]);
+
+        $this->actingAs($user);
+        $this->delete('/posts/' . $post->id)
+            ->seeStatusCode(200);
+        $this->notSeeInDatabase('posts', ['id' => $post->id]);
+
+        $this->delete('/posts/' . 1)
+            ->seeStatusCode(404);
+    }
 }

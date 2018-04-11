@@ -39,4 +39,13 @@ class PostController extends Controller
 
         return $post;
     }
+
+    public function delete(Request $request, $id)
+    {
+        $user = Auth::user();
+        $post = Post::find($id);
+        if($post)
+            $post->delete();
+        return 1;
+    }
 }

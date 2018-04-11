@@ -25,6 +25,7 @@ $router->group(['prefix' => 'comments'], function () use ($router) {
 $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->group(['prefix' => 'posts'], function () use ($router) {
         $router->put('/{id}', PostController::class . '@update');
+        $router->delete('/{id}', PostController::class . '@delete');
         $router->post('/', PostController::class . '@new');
     });
 });
