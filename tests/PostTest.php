@@ -1,5 +1,7 @@
 <?php
 
+use App\Post;
+
 class PostTest extends TestCase
 {
     public function testGetPosts()
@@ -43,18 +45,13 @@ class PostTest extends TestCase
         $this->put('/posts/' . $post->id, ["text" => $text])
             ->seeStatusCode(401);
 
-        $this->get('/posts/' . $post->id)
-            ->seeStatusCode(200)
-            ->seeJsonEquals($post->toArray());
+        $this->notSeeInDatabase('posts', ['id' => $post->id, 'text' => $text]);
 
         $this->actingAs($user);
         $this->put('/posts/' . $post->id, ["text" => $text])
             ->seeStatusCode(200);
 
-        $post->text = $text;
-        $this->get('/posts/' . $post->id)
-            ->seeStatusCode(200)
-            ->seeJsonEquals($post->toArray());
+        $this->seeInDatabase('posts', ['id' => $post->id, 'text' => $text]);
     }
 
     function testPostDelete()

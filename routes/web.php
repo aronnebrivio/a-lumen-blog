@@ -19,7 +19,6 @@ $router->group(['prefix' => 'posts'], function () use ($router) {
 
 $router->group(['prefix' => 'comments'], function () use ($router) {
     $router->get('/', CommentController::class . '@getAll');
-    $router->post('/', CommentController::class . '@new');
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
@@ -27,5 +26,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
         $router->put('/{id}', PostController::class . '@update');
         $router->delete('/{id}', PostController::class . '@delete');
         $router->post('/', PostController::class . '@new');
+    });
+
+    $router->group(['prefix' => 'comments'], function () use ($router) {
+        $router->put('/{id}', CommentController::class . '@update');
+        $router->delete('/{id}', CommentController::class . '@delete');
+        $router->post('/', CommentController::class . '@new');
     });
 });

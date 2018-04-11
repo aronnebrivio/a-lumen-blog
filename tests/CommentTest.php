@@ -36,20 +36,15 @@ class Comment extends TestCase
         ]);
         $text = str_random(300);
 
-        $this->put('/comment/' . $comment->id, ["text" => $text])
+        $this->put('/comments/' . $comment->id, ["text" => $text])
             ->seeStatusCode(401);
 
-        $this->get('/comment/' . $comment->id)
-            ->seeStatusCode(200)
-            ->seeJsonEquals($comment->toArray());
+        $this->notSeeInDatabase('comments', ['id' => $comment->id, 'text' => $text]);
 
         $this->actingAs($user);
-        $this->put('/comment/' . $comment->id, ["text" => $text])
+        $this->put('/comments/' . $comment->id, ["text" => $text])
             ->seeStatusCode(200);
 
-        $comment->text = $text;
-        $this->get('/comment/' . $comment->id)
-            ->seeStatusCode(200)
-            ->seeJsonEquals($comment->toArray());
+        $this->seeInDatabase('comments', ['id' => $comment->id, 'text' => $text]);
     }
 }

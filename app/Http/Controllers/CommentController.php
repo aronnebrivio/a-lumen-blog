@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -27,6 +28,7 @@ class CommentController extends Controller
 
     public function update(Request $request, $id)
     {
+        $user = Auth::user();
         $comment = Comment::find($id);
         $comment->fill($request->all());
         $comment->save();
