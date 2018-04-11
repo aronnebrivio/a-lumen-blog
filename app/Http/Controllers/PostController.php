@@ -45,7 +45,11 @@ class PostController extends Controller
         $user = Auth::user();
         $post = Post::find($id);
         if($post)
+        {
             $post->delete();
-        return 1;
+            return 1;
+        }
+        return response('Post not found', 404);
     }
+
 }
