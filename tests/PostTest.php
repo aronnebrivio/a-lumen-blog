@@ -6,7 +6,6 @@ class PostTest extends TestCase
 {
     public function testGetPosts()
     {
-        /* get all posts */
         $user = factory(App\User::class)->create();
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
@@ -18,7 +17,6 @@ class PostTest extends TestCase
 
     public function testGetPost()
     {
-        /* get single post */
         $user = factory(App\User::class)->create();
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
