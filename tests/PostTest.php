@@ -75,12 +75,12 @@ class PostTest extends TestCase
         $user = factory(App\User::class)->create();
         $sampleText = str_random(300);
 
-        $this->post('/posts', ['text' => $sampleText])
+        $this->post('/posts', ['text' => $sampleText, 'title' => 'tit'])
             ->seeStatusCode(401);
         $this->notSeeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
 
         $this->actingAs($user);
-        $this->post('/posts', ['text' => $sampleText])
+        $this->post('/posts', ['text' => $sampleText, 'title' => 'tit'])
             ->seeStatusCode(200);
         $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
     }
@@ -109,5 +109,29 @@ class PostTest extends TestCase
         $this->actingAs($user);
         $post = factory(App\Post::class)->create();
         $this->assertEquals([$user->toArray()], $post->user()->get()->toArray());
+    }
+
+    function testNewPostValidation()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+
+        $this->post('/posts')
+            ->seeStatusCode(422);
+        $this->notSeeInDatabase('posts', ['user_id' => $user->id]);
+
+        $this->post('/posts', ['title' => 'tit'])
+            ->seeStatusCode(422);
+        $this->notSeeInDatabase('posts', ['user_id' => $user->id]);
+
+
+        $this->post('/posts', ['text' => 'txt'])
+            ->seeStatusCode(422);
+        $this->notSeeInDatabase('posts', ['user_id' => $user->id]);
+
+
+        $this->post('/posts', ['title' => 'tit', 'text' => 'txt'])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'title' => 'tit']);
     }
 }
