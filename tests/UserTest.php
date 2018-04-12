@@ -74,11 +74,27 @@ class UserTest extends TestCase
         $user = factory(App\User::class)->create();
 
         $this->get('/users/' . 1)
-        ->seeStatusCode(200)
-        ->seeJsonEquals($user->toArray());
+            ->seeStatusCode(200)
+            ->seeJsonEquals($user->toArray());
 
         $this->get('/users')
             ->seeStatusCode(200)
             ->seeJsonEquals([$user->toArray()]);
+    }
+
+    public function testUserCoverage()
+    {
+        $user = factory(App\User::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id
+        ]);
+        $comment = factory(App\Comment::class)->create([
+            'user_id' => $user->id,
+            'post_id' => $post->id
+        ]);
+
+        $this->actingAs($user);
+        $this->assertEquals([$post->toArray()], $user->posts()->get()->toArray());
+        $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());
     }
 }
