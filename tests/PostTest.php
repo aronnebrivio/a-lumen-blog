@@ -134,4 +134,29 @@ class PostTest extends TestCase
             ->seeStatusCode(200);
         $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'title' => 'tit']);
     }
+
+    function testPostEditValidation()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
+
+        $this->put('/posts/' . $post->id)
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $post->text, 'title' => $post->title]);
+
+        $this->put('/posts/' . $post->id, ['title' => 'tit'])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $post->text, 'title' => 'tit']);
+
+
+        $this->put('/posts/' . $post->id, ['text' => 'txt'])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'title' => $post->title]);
+
+
+        $this->put('/posts/' . $post->id, ['title' => 'tit', 'text' => 'txt'])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'title' => 'tit']);
+    }
 }
