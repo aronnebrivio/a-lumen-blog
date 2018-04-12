@@ -12,6 +12,7 @@ class Post extends Model
     /* attributes */
     protected $fillable = [
         'text',
+        'title',
     ];
     protected $guarded = [
         'id',

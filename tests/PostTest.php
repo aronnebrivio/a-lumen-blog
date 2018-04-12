@@ -38,7 +38,7 @@ class PostTest extends TestCase
         ]);
         $newText = str_random(300);
 
-        $this->put('/posts/' . $post->id, ["text" => $newText])
+        $this->put('/posts/' . $post->id, ['text' => $newText])
             ->seeStatusCode(401);
 
         $this->notSeeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
