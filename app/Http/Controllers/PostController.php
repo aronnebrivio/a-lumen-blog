@@ -11,7 +11,7 @@ class PostController extends Controller
     public function get(Request $request, $id)
     {
         $post = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id);
-        if($request->input('comments')) {
+        if ($request->input('comments')) {
             $comments = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id)->comments()->withoutGlobalScope(AuthScope::class)->get();
             $post->comments = $comments;
         }
@@ -25,6 +25,10 @@ class PostController extends Controller
 
     public function new(Request $request)
     {
+        $this->validate($request, [
+            'title' => 'required',
+            'text' => 'required'
+        ]);
         $post = new Post;
         $post->fill($request->all());
         $post->save();
