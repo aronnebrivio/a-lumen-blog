@@ -101,7 +101,6 @@ class PostTest extends TestCase
         $this->json('GET', '/posts/' . $post->id, ['comments' => 1])
             ->seeStatusCode(200)
             ->seeJsonEquals($expected->toArray());
-
     }
 
     function testPostCoverage()
@@ -110,6 +109,5 @@ class PostTest extends TestCase
         $this->actingAs($user);
         $post = factory(App\Post::class)->create();
         $this->assertEquals([$user->toArray()], $post->user()->get()->toArray());
-
     }
 }

@@ -103,4 +103,25 @@ class UserTest extends TestCase
         $this->post('/users', ['email' => 'test@email.com', 'password' => 'password'])
             ->seeStatusCode(200);
     }
+
+    public function testUserEditValidation()
+    {
+        factory(App\User::class)->create([
+            'email' => 'test@email.com'
+        ]);
+        $user = factory(App\User::class)->create();
+
+        $this->actingAs($user);
+        $this->put('/users', ['email' => ''])
+            ->seeStatusCode(422);
+
+        $this->put('/users', ['email' => 'test'])
+            ->seeStatusCode(422);
+
+        $this->put('/users', ['email' => 'test@email.com'])
+            ->seeStatusCode(422);
+
+        $this->put('/users', ['email' => 'foo@bar.com'])
+            ->seeStatusCode(200);
+    }
 }
