@@ -18,6 +18,10 @@ class CommentController extends Controller
 
     public function new(Request $request)
     {
+        $this->validate($request, [
+            'text' => 'required',
+            'post_id' => 'required'
+        ]);
         $post_id = $request->all()['post_id'];
         Post::withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
         $comment = new Comment;

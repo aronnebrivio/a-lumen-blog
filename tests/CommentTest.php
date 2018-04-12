@@ -109,12 +109,12 @@ class Comment extends TestCase
         $this->actingAs($user);
         $post = factory(App\Post::class)->create();
 
-        $this->post('/comments')
+        $this->post('/comments', ['post_id' => $post->id])
             ->seeStatusCode(422);
         $this->notSeeInDatabase('comments', ['user_id' => $user->id, 'post_id' => $post->id]);
 
-        $this->post('/comments', ['text' => 'txt'])
+        $this->post('/comments', ['post_id' => $post->id, 'text' => 'txt'])
             ->seeStatusCode(200);
-        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'post_id' => $post->id]);
+        $this->seeInDatabase('comments', ['user_id' => $user->id, 'text' => 'txt', 'post_id' => $post->id]);
     }
 }
