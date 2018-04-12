@@ -3,40 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Post;
+use App\Scopes\AuthScope;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
     public function get($id)
     {
-        $post = Post::find($id);
-        if ($post)
-            return $post;
-
-        return response('Post not found', 404);
+        $post = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id);
+        return $post;
     }
 
     public function getAll()
     {
-        return Post::all();
+        return Post::withoutGlobalScope(AuthScope::class)->get();
     }
 
     public function new(Request $request)
     {
-        $user = Auth::user();
         $post = new Post;
         $post->fill($request->all());
-        $post->user_id = $user->id;
         $post->save();
     }
 
     public function update(Request $request, $id)
     {
-        $user = Auth::user();
-        $post = Post::where('id', $id)
-            ->where('user_id', $user->id)
-            ->first();
+        $post = Post::findOrFail($id);
         $post->fill($request->all());
         $post->save();
 
@@ -45,15 +37,9 @@ class PostController extends Controller
 
     public function delete($id)
     {
-        $user = Auth::user();
-        $post = Post::where('id', $id)
-            ->where('user_id', $user->id)
-            ->first();
-        if ($post) {
-            $post->delete();
-            return 1;
-        }
-        return response('Post not found', 404);
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return 1;
     }
 
 }

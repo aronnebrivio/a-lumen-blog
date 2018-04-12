@@ -11,7 +11,7 @@ class UserController extends Controller
 {
     public function get($id)
     {
-        return User::find($id);
+        return User::findOrFail($id);
     }
 
     public function getAll()
@@ -35,8 +35,7 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $logged = Auth::user();
-        $user = User::find($logged->id);
+        $user = Auth::user();
         $user->fill($request->all());
         $user->save();
         return $user;
