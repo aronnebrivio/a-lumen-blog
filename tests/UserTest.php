@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Hash;
+
 class UserTest extends TestCase
 {
     public function testNewUser()
@@ -51,10 +53,16 @@ class UserTest extends TestCase
     {
         $password = 'password';
         $user = factory(App\User::class)->create([
-            'password' => $password
+            'password' => Hash::make($password)
         ]);
-        $this->post('/login', ['email' => $user->email, 'password' => $password])
+        $this->post('/auth', ['email' => $user->email, 'password' => $password])
             ->seeStatusCode(200)
-            ->seeJsonEquals(['token' => $user->token]);
+            ->equalTo($user->token);
+
+        $this->post('/auth', ['email' => $user->email, 'password' => 'wrong'])
+            ->seeStatusCode(401);
+
+        $this->post('/auth', ['email' => 'wrong', 'password' => 'wrong'])
+            ->seeStatusCode(404);
     }
 }

@@ -41,4 +41,18 @@ class UserController extends Controller
         $user->save();
         return $user;
     }
+
+    public function getToken(Request $request)
+    {
+        $data = $request->all();
+        $user = User::where('email', $data['email'])
+            ->first();
+        if($user) {
+            if(Hash::check($data['password'], $user->password))
+                return $user->token;
+            return response('Wrong password', 401);
+        }
+
+        return response('User not found', 404);
+    }
 }
