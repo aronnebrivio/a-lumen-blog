@@ -65,4 +65,20 @@ class UserTest extends TestCase
         $this->post('/auth', ['email' => 'wrong', 'password' => 'wrong'])
             ->seeStatusCode(404);
     }
+
+    public function testUserControllerCoverage()
+    {
+        $this->get('/users/' . 1)
+            ->seeStatusCode(404);
+
+        $user = factory(App\User::class)->create();
+
+        $this->get('/users/' . 1)
+        ->seeStatusCode(200)
+        ->seeJsonEquals($user->toArray());
+
+        $this->get('/users')
+            ->seeStatusCode(200)
+            ->seeJsonEquals([$user->toArray()]);
+    }
 }
