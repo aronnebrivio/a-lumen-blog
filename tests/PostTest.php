@@ -1,7 +1,5 @@
 <?php
 
-use App\Post;
-
 class PostTest extends TestCase
 {
     public function testGetPosts()

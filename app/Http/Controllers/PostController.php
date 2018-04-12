@@ -11,7 +11,7 @@ class PostController extends Controller
     public function get(Request $request, $id)
     {
         $post = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id);
-        if($request->input('comments')>0) {
+        if($request->input('comments')) {
             $comments = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id)->comments()->withoutGlobalScope(AuthScope::class)->get();
             $post->comments = $comments;
         }
