@@ -22,7 +22,7 @@ class UserTest extends TestCase
             'email' => $email
         ]);
         $this->post('/users', ['email' => $email, 'password' => $pwd])
-            ->seeStatusCode(409);
+            ->seeStatusCode(422);
     }
 
     public function testAuth()
@@ -97,10 +97,16 @@ class UserTest extends TestCase
 
     public function testNewUserValidation()
     {
-        $email = 'test';
-        $pwd = 'password';
-
-        $this->post('/users', ['email' => $email, 'password' => $pwd])
+        $this->post('/users')
             ->seeStatusCode(422);
+
+        $this->post('/users', ['email' => 'test', 'password' => 'password'])
+            ->seeStatusCode(422);
+
+        $this->post('/users', ['email' => 'test@email.com'])
+            ->seeStatusCode(422);
+
+        $this->post('/users', ['email' => 'test@email.com', 'password' => 'password'])
+            ->seeStatusCode(200);
     }
 }

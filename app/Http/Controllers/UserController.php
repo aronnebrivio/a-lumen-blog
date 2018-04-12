@@ -21,10 +21,11 @@ class UserController extends Controller
 
     public function new(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email|unique:users|max:191',
+            'password' => 'required',
+        ]);
         $data = $request->all();
-        if (User::where('email', $data['email'])->first())
-            return response('Invalid email', 409);
-
         $user = new User;
         $user->fill($data);
         $user->password = Hash::make($data['password']);
@@ -46,8 +47,8 @@ class UserController extends Controller
         $data = $request->all();
         $user = User::where('email', $data['email'])
             ->first();
-        if($user) {
-            if(Hash::check($data['password'], $user->password))
+        if ($user) {
+            if (Hash::check($data['password'], $user->password))
                 return $user->token;
             return response('Wrong password', 401);
         }
