@@ -85,15 +85,12 @@ class UserTest extends TestCase
     public function testUserCoverage()
     {
         $user = factory(App\User::class)->create();
-        $post = factory(App\Post::class)->create([
-            'user_id' => $user->id
-        ]);
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
         $comment = factory(App\Comment::class)->create([
-            'user_id' => $user->id,
             'post_id' => $post->id
         ]);
 
-        $this->actingAs($user);
         $this->assertEquals([$post->toArray()], $user->posts()->get()->toArray());
         $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());
     }

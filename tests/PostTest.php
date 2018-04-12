@@ -103,4 +103,13 @@ class PostTest extends TestCase
             ->seeJsonEquals($expected->toArray());
 
     }
+
+    function testPostCoverage()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
+        $this->assertEquals([$user->toArray()], $post->user()->get()->toArray());
+
+    }
 }
