@@ -89,4 +89,17 @@ class Comment extends TestCase
             ->seeStatusCode(200);
         $this->seeInDatabase('comments', ['user_id' => $user->id, 'post_id' => $post->id, 'text' => $sampleText]);
     }
+
+    function testCommentCoverage()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
+        $comment = factory(App\Comment::class)->create([
+            'post_id' => $post->id
+        ]);
+
+        $this->assertEquals([$user->toArray()], $comment->user()->get()->toArray());
+        $this->assertEquals([$post->toArray()], $comment->post()->get()->toArray());
+    }
 }
