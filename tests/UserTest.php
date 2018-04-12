@@ -94,4 +94,13 @@ class UserTest extends TestCase
         $this->assertEquals([$post->toArray()], $user->posts()->get()->toArray());
         $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());
     }
+
+    public function testNewUserValidation()
+    {
+        $email = 'test';
+        $pwd = 'password';
+
+        $this->post('/users', ['email' => $email, 'password' => $pwd])
+            ->seeStatusCode(422);
+    }
 }
