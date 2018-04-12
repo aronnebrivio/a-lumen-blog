@@ -86,4 +86,25 @@ class PostTest extends TestCase
             ->seeStatusCode(200);
         $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
     }
+
+    function testGetPostWithComments()
+    {
+        $user = factory(App\User::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id
+        ]);
+        $comment = factory(App\Comment::class)->create([
+           'user_id' => $user->id,
+           'post_id' => $post->id
+        ]);
+
+        $expected = $post;
+        $expected->comments = array(
+            $comment
+        );
+        $this->get('/posts/' . $post->id, ['comments' => 1])
+            ->seeStatusCode(200)
+            ->seeJsonEquals((array) $expected);
+
+    }
 }
