@@ -90,21 +90,19 @@ class PostTest extends TestCase
     function testGetPostWithComments()
     {
         $user = factory(App\User::class)->create();
-        $post = factory(App\Post::class)->create([
-            'user_id' => $user->id
-        ]);
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
         $comment = factory(App\Comment::class)->create([
-           'user_id' => $user->id,
            'post_id' => $post->id
         ]);
 
         $expected = $post;
-        $expected->comments = array(
+        $expected->comments = [
             $comment
-        );
-        $this->get('/posts/' . $post->id, ['comments' => 1])
+        ];
+        $this->json('GET', '/posts/' . $post->id, ['comments' => 1])
             ->seeStatusCode(200)
-            ->seeJsonEquals((array) $expected);
+            ->seeJsonEquals($expected->toArray());
 
     }
 }
