@@ -46,4 +46,15 @@ class UserTest extends TestCase
         $this->put('/users', ['email' => $email])
             ->seeStatusCode(200);
     }
+
+    public function testGetToken()
+    {
+        $password = 'password';
+        $user = factory(App\User::class)->create([
+            'password' => $password
+        ]);
+        $this->post('/login', ['email' => $user->email, 'password' => $password])
+            ->seeStatusCode(200)
+            ->seeJsonEquals(['token' => $user->token]);
+    }
 }

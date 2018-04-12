@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
 $router->get('/', ExampleController::class . '@test');
+$router->post('/auth', UserController::class . '@getToken');
 
 $router->group(['prefix' => 'users'], function () use ($router) {
     $router->get('/', UserController::class . '@getAll');
