@@ -36,10 +36,6 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'title' => 'filled',
-            'text' => 'filled'
-        ]);
         $post = Post::findOrFail($id);
         $post->fill($request->all());
         $post->save();
