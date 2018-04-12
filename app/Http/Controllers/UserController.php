@@ -23,7 +23,7 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'email' => 'required|email|unique:users|max:191',
-            'password' => 'required',
+            'password' => 'required'
         ]);
         $data = $request->all();
         $user = new User;
@@ -36,6 +36,9 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email|unique:users|max:191'
+        ]);
         $user = Auth::user();
         $user->fill($request->all());
         $user->save();
