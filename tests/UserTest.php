@@ -33,4 +33,17 @@ class UserTest extends TestCase
         $this->post('/', [], ['Authentication' => $user->token])
             ->seeStatusCode(200);
     }
+
+    public function testUserUpdate()
+    {
+        $user = factory(App\User::class)->create();
+        $email = 'test@example.com';
+
+        $this->put('/users', ['email' => $email])
+            ->seeStatusCode(401);
+
+        $this->actingAs($user);
+        $this->put('/users', ['email' => $email])
+            ->seeStatusCode(200);
+    }
 }
