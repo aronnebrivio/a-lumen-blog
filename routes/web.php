@@ -5,7 +5,6 @@ use App\Http\Controllers\ExampleController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
-$router->get('/', ExampleController::class . '@test');
 $router->post('/auth', UserController::class . '@getToken');
 
 $router->group(['prefix' => 'users'], function () use ($router) {
@@ -24,8 +23,6 @@ $router->group(['prefix' => 'comments'], function () use ($router) {
 });
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
-    $router->post('/', ExampleController::class . '@testAuth');
-
     $router->group(['prefix' => 'posts'], function () use ($router) {
         $router->put('/{id}', PostController::class . '@update');
         $router->delete('/{id}', PostController::class . '@delete');

@@ -25,17 +25,6 @@ class UserTest extends TestCase
             ->seeStatusCode(422);
     }
 
-    public function testAuth()
-    {
-        $user = factory(App\User::class)->create();
-
-        $this->post('/')
-            ->seeStatusCode(401);
-
-        $this->post('/', [], ['Authentication' => $user->token])
-            ->seeStatusCode(200);
-    }
-
     public function testUserUpdate()
     {
         $user = factory(App\User::class)->create();
@@ -44,8 +33,13 @@ class UserTest extends TestCase
         $this->put('/users', ['email' => $email])
             ->seeStatusCode(401);
 
-        $this->actingAs($user);
-        $this->put('/users', ['email' => $email])
+        /*
+            UPDATE
+            Al posto di usare actingAs() viene passato il token nell'header della richiesta.
+            In questo modo è possibile testare il funzionamento del meccanismo di autorizzazione via token,
+            senza dover creare un metodo ad-hoc.
+        */
+        $this->put('/users', ['email' => $email], ['Authentication' => $user->token])
             ->seeStatusCode(200);
     }
 
