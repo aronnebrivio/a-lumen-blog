@@ -89,7 +89,7 @@ class UserTest extends TestCase
         $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());
     }
 
-    public function testNewUserValidation()
+    public function testUserNewValidation()
     {
         $this->post('/users')
             ->seeStatusCode(422);
