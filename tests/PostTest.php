@@ -111,7 +111,7 @@ class PostTest extends TestCase
         $this->assertEquals([$user->toArray()], $post->user()->get()->toArray());
     }
 
-    function testNewPostValidation()
+    function testPostNewValidation()
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);

@@ -102,4 +102,19 @@ class Comment extends TestCase
         $this->assertEquals([$user->toArray()], $comment->user()->get()->toArray());
         $this->assertEquals([$post->toArray()], $comment->post()->get()->toArray());
     }
+
+    function testCommentNewValidation()
+    {
+        $user = factory(App\User::class)->create();
+        $this->actingAs($user);
+        $post = factory(App\Post::class)->create();
+
+        $this->post('/comments')
+            ->seeStatusCode(422);
+        $this->notSeeInDatabase('comments', ['user_id' => $user->id, 'post_id' => $post->id]);
+
+        $this->post('/comments', ['text' => 'txt'])
+            ->seeStatusCode(200);
+        $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => 'txt', 'post_id' => $post->id]);
+    }
 }
