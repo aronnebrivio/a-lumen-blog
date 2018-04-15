@@ -1,6 +1,6 @@
 <?php
 
-class Comment extends TestCase
+class CommentTest extends TestCase
 {
     public function testGetCommentsByPostId()
     {
