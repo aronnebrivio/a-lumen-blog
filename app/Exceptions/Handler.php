@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use ErrorException;
 use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use UnexpectedValueException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,6 +50,12 @@ class Handler extends ExceptionHandler
     {
         if ($e instanceof MethodNotAllowedHttpException) {
             return response('Method Not Allowed.', 405);
+        }
+        if ($e instanceof UnexpectedValueException) {
+            return response('Unexpected value.', 422);
+        }
+        if ($e instanceof ErrorException) {
+            return response('Unprocessable. Please provide all inputs and retry.', 422);
         }
         return parent::render($request, $e);
     }
