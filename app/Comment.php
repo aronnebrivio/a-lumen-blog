@@ -9,7 +9,6 @@ class Comment extends Model
 {
     use AuthTrait;
 
-    /* attributes */
     protected $fillable = [
         'text',
         'post_id',
@@ -17,8 +16,6 @@ class Comment extends Model
     protected $guarded = [
         'id',
         'user_id',
-        'created_at',
-        'updated_at',
     ];
     protected $table = 'comments';
 

@@ -6,8 +6,9 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function get($id)
     {
@@ -19,11 +20,16 @@ class UserController extends Controller
         return User::all();
     }
 
+    /**
+     * @param Request $request
+     * @return User
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function new(Request $request)
     {
         $this->validate($request, [
             'email' => 'required|email|unique:users|max:191',
-            'password' => 'required'
+            'password' => 'required|string|min:6',
         ]);
         $data = $request->all();
         $user = new User;
@@ -34,10 +40,15 @@ class UserController extends Controller
         return $user;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function update(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|unique:users|max:191'
+            'email' => 'required|email|unique:users|max:191',
         ]);
         $user = Auth::user();
         $user->fill($request->all());
@@ -45,8 +56,17 @@ class UserController extends Controller
         return $user;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function getToken(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
         $data = $request->all();
         $user = User::where('email', $data['email'])
             ->first();

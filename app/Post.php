@@ -9,7 +9,6 @@ class Post extends Model
 {
     use AuthTrait;
 
-    /* attributes */
     protected $fillable = [
         'text',
         'title',

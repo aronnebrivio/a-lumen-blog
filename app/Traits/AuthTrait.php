@@ -13,10 +13,10 @@ trait AuthTrait
         static::addGlobalScope(new AuthScope);
     }
 
-    public function save(array $options = [] )
+    public function save(array $options = [])
     {
         $user = Auth::user();
-        if($user)
+        if ($user)
             $this->user_id = $user->id;
         parent::save($options);
     }

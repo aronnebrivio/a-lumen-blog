@@ -91,7 +91,7 @@ class PostTest extends TestCase
         $this->actingAs($user);
         $post = factory(App\Post::class)->create();
         $comment = factory(App\Comment::class)->create([
-           'post_id' => $post->id
+            'post_id' => $post->id
         ]);
 
         $expected = $post;
