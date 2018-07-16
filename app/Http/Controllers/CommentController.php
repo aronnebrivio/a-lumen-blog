@@ -22,7 +22,10 @@ class CommentController extends BaseController
         ]);
         $post_id = $request->all()['post_id'];
         Post::withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
-        return Comment::withoutGlobalScope(AuthScope::class)->where('post_id', $post_id)->get();
+        return Comment::withoutGlobalScope(AuthScope::class)
+            ->where('post_id', $post_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     /**

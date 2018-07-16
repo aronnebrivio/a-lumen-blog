@@ -21,7 +21,9 @@ class PostController extends BaseController
 
     public function getAll()
     {
-        return Post::withoutGlobalScope(AuthScope::class)->get();
+        return Post::withoutGlobalScope(AuthScope::class)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     /**
