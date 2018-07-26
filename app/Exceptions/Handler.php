@@ -48,15 +48,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof MethodNotAllowedHttpException) {
+        if ($e instanceof ValidationException)
+            return response($e->validator->messages()->messages(), 422);
+
+        if ($e instanceof MethodNotAllowedHttpException)
             return response('Method Not Allowed.', 405);
-        }
-        if ($e instanceof UnexpectedValueException) {
+
+        if ($e instanceof UnexpectedValueException)
             return response('Unexpected value.', 422);
-        }
-        if ($e instanceof ErrorException) {
+
+        if ($e instanceof ModelNotFoundException)
+            return response('Resource not found.', 404);
+
+        if ($e instanceof ErrorException)
             return response('Unprocessable. Please provide all inputs and retry.', 422);
-        }
-        return parent::render($request, $e);
+
+        return response($e->getMessage(), $e->getCode());
     }
 }
