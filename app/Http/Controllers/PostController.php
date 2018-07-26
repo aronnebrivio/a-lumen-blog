@@ -11,9 +11,9 @@ class PostController extends BaseController
 {
     public function get(Request $request, $id)
     {
-        $post = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id);
+        $post = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id);
         if ($request->input('comments')) {
-            $comments = Post::withoutGlobalScope(AuthScope::class)->findOrFail($id)->comments()->withoutGlobalScope(AuthScope::class)->get();
+            $comments = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id)->comments()->withoutGlobalScope(AuthScope::class)->get();
             $post->comments = $comments;
         }
         return $post;
@@ -21,7 +21,7 @@ class PostController extends BaseController
 
     public function getAll()
     {
-        return Post::withoutGlobalScope(AuthScope::class)
+        return Post::query()->withoutGlobalScope(AuthScope::class)
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -46,16 +46,22 @@ class PostController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::query()->findOrFail($id);
         $post->fill($request->all());
         $post->save();
 
         return $post;
     }
 
+    /**
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
     public function delete($id)
     {
-        $post = Post::findOrFail($id);
+        /** @var Post $post */
+        $post = Post::query()->findOrFail($id);
         $post->delete();
         return [];
     }

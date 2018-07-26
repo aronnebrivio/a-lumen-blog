@@ -1,6 +1,6 @@
 <?php
 
-class ExceptionTest extends TestCase
+class ExceptionsTest extends TestCase
 {
     public function testMethodNotAllowedEx()
     {

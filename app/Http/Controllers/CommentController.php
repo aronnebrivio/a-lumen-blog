@@ -21,8 +21,8 @@ class CommentController extends BaseController
             'post_id' => 'required|integer|min:1',
         ]);
         $post_id = $request->all()['post_id'];
-        Post::withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
-        return Comment::withoutGlobalScope(AuthScope::class)
+        Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
+        return Comment::query()->withoutGlobalScope(AuthScope::class)
             ->where('post_id', $post_id)
             ->orderBy('created_at', 'desc')
             ->get();
@@ -40,7 +40,7 @@ class CommentController extends BaseController
             'post_id' => 'required'
         ]);
         $post_id = $request->all()['post_id'];
-        Post::withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
+        Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
         $comment = new Comment;
         $comment->fill($request->all());
         $comment->save();
@@ -49,16 +49,23 @@ class CommentController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $comment = Comment::where('id', $id)->first();
+        /** @var Comment $comment */
+        $comment = Comment::query()->where('id', $id)->first();
         $comment->fill($request->all());
         $comment->save();
 
         return $comment;
     }
 
+    /**
+     * @param $id
+     * @return array
+     * @throws \Exception
+     */
     public function delete($id)
     {
-        $comment = Comment::findOrFail($id);
+        /** @var Comment $comment */
+        $comment = Comment::query()->findOrFail($id);
         $comment->delete();
         return [];
     }

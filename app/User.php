@@ -14,8 +14,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $fillable = [
         'email',
-		'first_name',
-		'last_name',
+        'first_name',
+        'last_name',
     ];
     protected $hidden = [
         'password',

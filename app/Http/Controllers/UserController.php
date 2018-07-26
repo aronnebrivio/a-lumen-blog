@@ -12,7 +12,7 @@ class UserController extends BaseController
 {
     public function get($id)
     {
-        return User::findOrFail($id);
+        return User::query()->findOrFail($id);
     }
 
     public function getAll()
@@ -30,6 +30,8 @@ class UserController extends BaseController
         $this->validate($request, [
             'email' => 'required|email|unique:users|max:191',
             'password' => 'required|string|min:6',
+            'first_name' => 'filled|string',
+            'last_name' => 'filled|string',
         ]);
         $data = $request->all();
         $user = new User;
@@ -37,6 +39,8 @@ class UserController extends BaseController
         $user->password = Hash::make($data['password']);
         $user->token = str_random(64);
         $user->save();
+        /** @var User $user */
+        $user = User::query()->find($user->id);
         return $user;
     }
 
@@ -48,8 +52,13 @@ class UserController extends BaseController
     public function update(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|unique:users|max:191',
+            'email' => 'required|email|max:191',
         ]);
+
+        if(!$this->checkEmail($request->input('email')))
+            return response('The email has already been taken.', 409);
+
+        /** @var User $user */
         $user = Auth::user();
         $user->fill($request->all());
         $user->save();
@@ -68,7 +77,7 @@ class UserController extends BaseController
             'password' => 'required|string',
         ]);
         $data = $request->all();
-        $user = User::where('email', $data['email'])
+        $user = User::query()->where('email', $data['email'])
             ->first();
         if ($user) {
             if (Hash::check($data['password'], $user->password))
@@ -77,5 +86,15 @@ class UserController extends BaseController
         }
 
         return response('User not found', 404);
+    }
+
+    private function checkEmail($email)
+    {
+        $nusers = User::query()->where('email', $email)
+            ->where('id', '<>', Auth::user()->id)
+            ->count();
+        if($nusers > 0)
+            return false;
+        return true;
     }
 }
