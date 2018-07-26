@@ -3,7 +3,9 @@
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+use Laravel\Lumen\Routing\Router;
 
+/** @var Router $router */
 $router->post('/auth', UserController::class . '@getToken');
 
 $router->group(['prefix' => 'users'], function () use ($router) {

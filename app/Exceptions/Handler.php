@@ -30,9 +30,8 @@ class Handler extends ExceptionHandler
      * Report or log an exception.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
-     *
-     * @param  \Exception $e
-     * @return void
+     * @param Exception $e
+     * @throws Exception
      */
     public function report(Exception $e)
     {
@@ -48,15 +47,21 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        if ($e instanceof MethodNotAllowedHttpException) {
+        if ($e instanceof ValidationException)
+            return response($e->validator->messages()->messages(), 422);
+
+        if ($e instanceof MethodNotAllowedHttpException)
             return response('Method Not Allowed.', 405);
-        }
-        if ($e instanceof UnexpectedValueException) {
+
+        if ($e instanceof UnexpectedValueException)
             return response('Unexpected value.', 422);
-        }
-        if ($e instanceof ErrorException) {
+
+        if ($e instanceof ModelNotFoundException)
+            return response('The resource you are looking for is not available or does not belong to you.', 404);
+
+        if ($e instanceof ErrorException)
             return response('Unprocessable. Please provide all inputs and retry.', 422);
-        }
-        return parent::render($request, $e);
+
+        return response($e->getMessage(), $e->getCode());
     }
 }
