@@ -119,7 +119,7 @@ class UserTest extends TestCase
             ->seeStatusCode(422);
 
         $this->put('/users', ['email' => 'test@email.com'])
-            ->seeStatusCode(422);
+            ->seeStatusCode(409);
 
         $this->put('/users', ['email' => 'foo@bar.com'])
             ->seeStatusCode(200);
