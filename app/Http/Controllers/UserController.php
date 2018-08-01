@@ -65,11 +65,11 @@ class UserController extends BaseController
         return $user;
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
-     * @throws \Illuminate\Validation\ValidationException
-     */
+	/**
+	 * @param Request $request
+	 * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+	 * @throws \Illuminate\Validation\ValidationException
+	 */
     public function getToken(Request $request)
     {
         $this->validate($request, [
@@ -81,7 +81,7 @@ class UserController extends BaseController
             ->first();
         if ($user) {
             if (Hash::check($data['password'], $user->password))
-                return $user->token;
+                return ['id' => $user->id, 'token' => $user->token];
             return response('Wrong password', 401);
         }
 
