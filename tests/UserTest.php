@@ -51,7 +51,7 @@ class UserTest extends TestCase
         ]);
         $this->post('/auth', ['email' => $user->email, 'password' => $password])
             ->seeStatusCode(200)
-            ->equalTo($user->token);
+            ->seeJsonEquals(['id' => $user->id, 'token' => $user->token]);
 
         $this->post('/auth', ['email' => $user->email, 'password' => 'wrong'])
             ->seeStatusCode(401);
