@@ -20,11 +20,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
         'token',
-        'created_at',
         'updated_at',
     ];
     protected $guarded = [
         'id',
+        'created_at',
     ];
     protected $table = 'users';
 
