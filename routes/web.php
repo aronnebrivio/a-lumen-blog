@@ -6,8 +6,11 @@ use App\Http\Controllers\UserController;
 use Laravel\Lumen\Routing\Router;
 
 /** @var Router $router */
+$router->get('/', function () {
+	return redirect('https://blog-aronnebrivio.restlet.io');
+});
 $router->get('/version', function () {
-	return response('1.0', 200);
+	return response('0.7', 200);
 });
 $router->post('/auth', UserController::class . '@getToken');
 
