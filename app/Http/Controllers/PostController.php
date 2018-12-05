@@ -13,7 +13,9 @@ class PostController extends BaseController
     {
         $post = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id);
         if ($request->input('comments')) {
-            $comments = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id)->comments()->withoutGlobalScope(AuthScope::class)->get();
+            /** @var Post $post */
+            $post = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id);
+            $comments = $post->comments()->withoutGlobalScope(AuthScope::class)->get();
             $post->comments = $comments;
         }
         return $post;
