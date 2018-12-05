@@ -17,6 +17,6 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     public function setUp()
     {
         parent::setUp();
-        Artisan::call("migrate:refresh");
+        Artisan::call('migrate:refresh');
     }
 }
