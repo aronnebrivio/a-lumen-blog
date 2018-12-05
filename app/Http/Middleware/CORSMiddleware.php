@@ -17,12 +17,7 @@ class CORSMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if ($this->isPreflightRequest($request)) {
-            $response = $this->createEmptyResponse();
-        } else {
-            $response = $next($request);
-        }
-
+        $response = $this->isPreflightRequest($request) ? Response(null, 204) : $next($request);
         return $this->addCorsHeaders($request, $response);
     }
 
@@ -36,16 +31,6 @@ class CORSMiddleware
     protected function isPreflightRequest($request)
     {
         return $request->isMethod('OPTIONS');
-    }
-
-    /**
-     * Create empty response for preflight request.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    protected function createEmptyResponse()
-    {
-        return new Response(null, 204);
     }
 
     /**
