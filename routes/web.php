@@ -10,7 +10,7 @@ $router->get('/', function () {
 	return redirect('https://blog-aronnebrivio.restlet.io');
 });
 $router->get('/version', function () {
-	return response('0.8', 200);
+	return response('0.9', 200);
 });
 $router->post('/auth', UserController::class . '@getToken');
 
