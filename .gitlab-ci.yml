@@ -4,7 +4,7 @@ services:
   - mysql:5.7
 
 variables:
-  MYSQL_DATABASE: blog_testing
+  MYSQL_DATABASE: blog
   MYSQL_ROOT_PASSWORD: root
   DB_HOST: mysql
   DB_USERNAME: root
