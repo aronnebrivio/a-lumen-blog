@@ -33,7 +33,7 @@ deploy_production:
     - ~/.composer/vendor/bin/envoy run deploy --commit="$CI_COMMIT_SHA"
   environment:
     name: production
-    url: http://192.168.1.1
+    url: http://195.110.58.197
   when: manual
   only:
     - master
