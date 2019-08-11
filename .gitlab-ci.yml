@@ -16,7 +16,7 @@ stages:
 unit_test:
   stage: test
   script:
-    - cp .env.example .env
+    - cp .env.ci .env
     - composer install
     - php artisan migrate
     - vendor/bin/phpunit
