@@ -1,10 +1,10 @@
-image: registry.gitlab.com/aroblu94/blog-backend:latest
+image: aronnebrivio/php7.2-envoy:latest
 
 services:
   - mysql:5.7
 
 variables:
-  MYSQL_DATABASE: blog_testing
+  MYSQL_DATABASE: db
   MYSQL_ROOT_PASSWORD: root
   DB_HOST: mysql
   DB_USERNAME: root
