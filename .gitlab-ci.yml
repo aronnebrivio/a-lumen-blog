@@ -1,4 +1,4 @@
-image: registry.gitlab.com/aroblu94/blog-backend:latest
+image: aronnebrivio/php7.3-envoy:latest
 
 services:
   - mysql:5.7
@@ -16,7 +16,7 @@ stages:
 unit_test:
   stage: test
   script:
-    - cp .env.example .env
+    - cp .env.ci .env
     - composer install
     - php artisan migrate
     - vendor/bin/phpunit
@@ -24,7 +24,7 @@ unit_test:
 deploy_production:
   stage: deploy
   script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - "which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )"
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
