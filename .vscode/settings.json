@@ -4,5 +4,5 @@
     "yet-phpunit.docker.paths": {
         "/Users/aronnebrivio/Progetti/Blog/blog-backend": "/var/www/html"
     },
-    "yet-phpunit.phpunitBinary": "/var/www/html/vendor/phpunit/phpunit/phpunit"
+    "yet-phpunit.phpunitBinary": "/var/www/html/vendor/bin/phpunit"
 }
