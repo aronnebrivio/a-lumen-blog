@@ -14,9 +14,24 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
         return require __DIR__ . '/../bootstrap/app.php';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        Artisan::call('migrate:refresh');
+        Artisan::call('migrate:fresh');
+        foreach (get_declared_classes() as $class) {
+            try {
+                $reflection = new \ReflectionClass($class);
+                if (
+                    !$reflection->isAbstract()
+                    && is_subclass_of($class, Model::class)
+                    && $reflection->hasMethod('flushHooks')
+                    && !in_array(Mockery\MockInterface::class, class_implements($class))
+                ) {
+                    $class::flushHooks();
+                    $class::bootMappable();
+                }
+            } catch (ReflectionException $e) {
+            }
+        }
     }
 }
