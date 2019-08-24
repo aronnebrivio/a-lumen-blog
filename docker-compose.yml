@@ -1,4 +1,4 @@
-version: '3.5'
+version: "3.5"
 # All parameters used are in .env file
 services:
   blog-lumen:
@@ -7,7 +7,7 @@ services:
     #  args:
     #    uid: ${UID}
     #    xdebug_port: ${XDEBUG_PORT}
-    image: fattureincloud/php:7.2dev
+    image: aronnebrivio/php7.3-dev
     container_name: blog-lumen
     environment:
       - APACHE_RUN_USER=#${UID}
