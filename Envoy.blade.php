@@ -52,7 +52,7 @@
     # This will list our releases by modification time and delete all but the 3 most recent.
     purging=$(ls -dt {{ $releases_dir }}/* | tail -n +3);
 
-    if [ $releases_dir -ne "" ] && [ $purging -ne "" ]; then
+    if [ "$releases_dir" -ne "" ] && [ "$purging" -ne "" ]; then
         echo Purging old releases: $purging;
         rm -rf $purging;
     else
