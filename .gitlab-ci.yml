@@ -1,4 +1,4 @@
-image: aronnebrivio/php7.3-envoy:latest
+image: aronnebrivio/php:7.3-envoy
 
 services:
   - mysql:5.7
