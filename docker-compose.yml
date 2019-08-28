@@ -3,11 +3,11 @@ version: "3.5"
 services:
   blog-lumen:
     #build:
-    #  context: '.docker/local'
+    #  context: 'docker/local'
     #  args:
     #    uid: ${UID}
     #    xdebug_port: ${XDEBUG_PORT}
-    image: aronnebrivio/php7.3-dev
+    image: aronnebrivio/php:7.3-dev
     container_name: blog-lumen
     environment:
       - APACHE_RUN_USER=#${UID}
@@ -31,7 +31,7 @@ services:
   blog-db:
     image: mysql:5.7
     restart: "always"
-    #m!IMPORTANT!: This must be the same as DB_HOST variable in .env file
+    # !IMPORTANT!: This must be the same as DB_HOST variable in .env file
     container_name: blog-db
     volumes:
       # The db files are stored in this named volume
