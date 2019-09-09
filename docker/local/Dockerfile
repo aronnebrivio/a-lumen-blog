@@ -19,6 +19,10 @@ RUN apt-get install -y \
     libfreetype6-dev \
     libzip-dev \
     g++ \
+    pkg-config \
+    build-essential \
+    libmemcached-dev \
+    libmemcached-tools \
     memcached
 
 # 2. apache configs + document root
@@ -61,7 +65,7 @@ RUN yes | pecl install xdebug \
 
 # 7. memcached
 RUN git clone https://github.com/php-memcached-dev/php-memcached.git
-RUN cd php-memcached && git checkout php7 && phpize && ./configure --disable-memcached-sasl && make install
+RUN cd php-memcached && phpize && ./configure --disable-memcached-sasl && make -j `cat /proc/cpuinfo | grep processor | wc -l` && make install
 RUN echo 'extension = memcached.so' > /usr/local/etc/php/conf.d/memcached.ini
 
 # 8. we need a user with the same UID/GID with host user
