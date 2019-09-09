@@ -16,9 +16,9 @@ services:
       - XDEBUG_ENABLE=${XDEBUG_ENABLE}
     volumes:
       # This sync the project folder with PHP image main folder
-      - .:/var/www/html
+      - .:/var/www/html:cached
       # XDebug profiler output dir
-      - ./private/profiler:/var/www/profiler
+      - ./private/profiler:/var/www/profiler:cached
       - /var/www/html/storage
     command: sh /var/www/html/docker/local/init.sh
     ports:
