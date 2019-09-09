@@ -18,7 +18,8 @@ RUN apt-get install -y \
     libreadline-dev \
     libfreetype6-dev \
     libzip-dev \
-    g++
+    g++ \
+    memcached
 
 # 2. apache configs + document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -46,7 +47,7 @@ RUN docker-php-ext-install \
 # 5. composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-#6. configuring xdebug
+# 6. configuring xdebug
 ARG xdebug_port
 RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
@@ -58,7 +59,12 @@ RUN yes | pecl install xdebug \
     && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.profiler_output_dir=\"/var/www/profiler\"" >> /usr/local/etc/php/conf.d/xdebug.ini
 
-# 6. we need a user with the same UID/GID with host user
+# 7. memcached
+RUN git clone https://github.com/php-memcached-dev/php-memcached.git
+RUN cd php-memcached && git checkout php7 && phpize && ./configure --disable-memcached-sasl && make install
+RUN echo 'extension = memcached.so' > /usr/local/etc/php/conf.d/memcached.ini
+
+# 8. we need a user with the same UID/GID with host user
 # so when we execute CLI commands, all the host file's ownership remains intact
 # otherwise command from inside container will create root-owned files and directories
 ARG uid
