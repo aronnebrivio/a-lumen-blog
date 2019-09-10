@@ -15,7 +15,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
     }
 
     /**
@@ -32,8 +31,8 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('api', function ($request) {
             /** @var Request $request */
-            if ($request->header('AuthMiddleware')) {
-                return User::query()->where('token', $request->header('AuthMiddleware'))->first();
+            if ($request->header('Authorization')) {
+                return User::query()->where('token', $request->header('Authorization'))->first();
             }
         });
     }
