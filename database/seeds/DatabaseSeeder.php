@@ -17,11 +17,11 @@ class DatabaseSeeder extends Seeder
     {
         // Create users
         $users[] = factory(User::class)->create([
-            'email' => 'aroblu94@gmail.com',
+            'email' => 'testblog.aronnebrivio@dispostable.com',
             'token' => 'a0h1WP0vmDEFeRTdefc7b9VLjpIiovbcwibrlnpdqmqxpZR5fR2kwnFCeJeGHsa3',
             'password' => Hash::make('password'),
-			'first_name' => 'Aronne',
-			'last_name' => 'Brivio',
+            'first_name' => 'Foo',
+            'last_name' => 'Bar',
         ]);
         for ($i = 0; $i < 4; $i++)
             $users[] = factory(User::class)->create();

@@ -28,7 +28,7 @@ class UserController extends BaseController
     public function new(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|unique:users|max:191',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
             'first_name' => 'filled|string',
             'last_name' => 'filled|string',
@@ -52,24 +52,31 @@ class UserController extends BaseController
     public function update(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|max:191',
+            'email' => 'filled|email|max:191',
+            'first_name' => 'filled|string',
+            'last_name' => 'filled|string',
+            'password' => 'filled|string|min:6',
         ]);
 
-        if(!$this->checkEmail($request->input('email')))
+        if (!$this->checkEmail($request->input('email'))) {
             return response('The email has already been taken.', 409);
+        }
+
 
         /** @var User $user */
         $user = Auth::user();
         $user->fill($request->all());
+        if ($request->input('password'))
+            $user->password = Hash::make($request->input('password'));
         $user->save();
         return $user;
     }
 
-	/**
-	 * @param Request $request
-	 * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
-	 * @throws \Illuminate\Validation\ValidationException
-	 */
+    /**
+     * @param Request $request
+     * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function getToken(Request $request)
     {
         $this->validate($request, [
@@ -80,8 +87,9 @@ class UserController extends BaseController
         $user = User::query()->where('email', $data['email'])
             ->first();
         if ($user) {
-            if (Hash::check($data['password'], $user->password))
+            if (Hash::check($data['password'], $user->password)) {
                 return ['id' => $user->id, 'token' => $user->token];
+            }
             return response('Wrong password', 401);
         }
 
@@ -93,8 +101,9 @@ class UserController extends BaseController
         $nusers = User::query()->where('email', $email)
             ->where('id', '<>', Auth::user()->id)
             ->count();
-        if($nusers > 0)
+        if ($nusers > 0) {
             return false;
+        }
         return true;
     }
 }

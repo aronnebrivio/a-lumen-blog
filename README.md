@@ -1,13 +1,26 @@
 # Blog backend
-[Lumen](https://lumen.laravel.com/) project providing an API to a blog environment, with Users, Posts and Comments.    
-    
+[Lumen](https://lumen.laravel.com/) project providing an API to a blog environment, with Users, Posts and Comments.
+
+Production endpoint: [blog-backend.aronnebrivio.xyz](http://blog-backend.aronnebrivio.xyz)
+
 Documentation can be found [here](https://blog-aronnebrivio.restlet.io).
 
+## Requirements
+- [Docker](https://www.docker.com/)
+
 ## Installation
-- Install required dependencies with `composer install`    
-- Create a local database accordingly to the `.env` file    
-- Run the migrations with `php artisan migrate:refresh` (if you want some random data run with `--seed`)    
-- Serve it locally creating a vhost that points to the project root    
-    
+- `cd` in project directory
+- Create `.env` file with `cd .env.example .env` and fill all variables
+- Start Lumen and Database containers with `docker-compose up -d`
+- Install required dependencies with `docker exec -it blog-lumen bash -c "composer install"`
+- Run migrations with `docker exec -it blog-lumen bash -c "php artisan migrate:fresh --seed"`
+- Profit
+
+**Note**: APIs will be available at `http://localhost:PHP_HOST_PORT`, where `PHP_HOST_PORT` is declared in `.env` file.
+
 ## Test
 Tests are under `/tests` folder, run it with `phpunit`.
+
+## ToDo
+- Makefile
+- Dockerized deploy
