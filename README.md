@@ -3,7 +3,7 @@
 
 Production endpoint: [blog-backend.aronnebrivio.xyz](http://blog-backend.aronnebrivio.xyz)
 
-Documentation can be found [here](https://blog-aronnebrivio.restlet.io).
+Documentation can be found [here](https://documenter.getpostman.com/view/4711074/SVmr11U3?version=latest).
 
 ## Requirements
 - [Docker](https://www.docker.com/)
