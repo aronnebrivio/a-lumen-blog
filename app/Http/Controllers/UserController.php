@@ -52,16 +52,22 @@ class UserController extends BaseController
     public function update(Request $request)
     {
         $this->validate($request, [
-            'email' => 'required|email|max:191',
+            'email' => 'filled|email|max:191',
+            'first_name' => 'filled|string',
+            'last_name' => 'filled|string',
+            'password' => 'filled|string|min:6',
         ]);
 
         if (!$this->checkEmail($request->input('email'))) {
             return response('The email has already been taken.', 409);
         }
 
+
         /** @var User $user */
         $user = Auth::user();
         $user->fill($request->all());
+        if ($request->input('password'))
+            $user->password = Hash::make($request->input('password'));
         $user->save();
         return $user;
     }
