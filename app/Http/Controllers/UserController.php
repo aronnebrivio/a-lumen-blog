@@ -62,12 +62,12 @@ class UserController extends BaseController
             return response('The email has already been taken.', 409);
         }
 
-
         /** @var User $user */
         $user = Auth::user();
         $user->fill($request->all());
-        if ($request->input('password'))
+        if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
+        }
         $user->save();
         return $user;
     }
