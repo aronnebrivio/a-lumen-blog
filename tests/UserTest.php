@@ -39,7 +39,7 @@ class UserTest extends TestCase
             In questo modo è possibile testare il funzionamento del meccanismo di autorizzazione via token,
             senza dover creare un metodo ad-hoc.
         */
-        $this->put('/users', ['email' => $email], ['AuthMiddleware' => $user->token])
+        $this->put('/users', ['email' => $email], ['Authorization' => $user->token])
             ->seeStatusCode(200);
     }
 
