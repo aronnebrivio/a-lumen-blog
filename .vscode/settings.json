@@ -2,7 +2,7 @@
     "yet-phpunit.docker.enable": true,
     "yet-phpunit.docker.command": "docker-compose run --rm blog-lumen",
     "yet-phpunit.docker.paths": {
-        "/Users/aronnebrivio/Progetti/Blog/blog-backend": "/var/www/html"
+        "/home/aronne/Projects/Blog/backend": "/var/www/html"
     },
     "yet-phpunit.phpunitBinary": "/var/www/html/vendor/bin/phpunit"
 }
