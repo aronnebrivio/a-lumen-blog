@@ -9,23 +9,17 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class PostController extends BaseController
 {
-    public function get(Request $request, $id)
+    public function get($id)
     {
-        $post = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id);
-        if ($request->input('comments')) {
-            /** @var Post $post */
-            $post = Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($id);
-            $comments = $post->comments()->withoutGlobalScope(AuthScope::class)->get();
-            $post->comments = $comments;
-        }
-        return $post;
+        return $this->getOne($id);
     }
 
     public function getAll()
     {
-        return Post::query()->withoutGlobalScope(AuthScope::class)
+        $posts = Post::withoutGlobalScope(AuthScope::class)
             ->orderBy('created_at', 'desc')
             ->get();
+        return $posts;
     }
 
     /**
@@ -39,20 +33,21 @@ class PostController extends BaseController
             'title' => 'required',
             'text' => 'required'
         ]);
+
         $post = new Post;
         $post->fill($request->all());
         $post->save();
 
-        return $post;
+        return $this->getOne($post->id);
     }
 
     public function update(Request $request, $id)
     {
-        $post = Post::query()->findOrFail($id);
+        $post = Post::findOrFail($id);
         $post->fill($request->all());
         $post->save();
 
-        return $post;
+        return $this->getOne($post->id);
     }
 
     /**
@@ -62,10 +57,15 @@ class PostController extends BaseController
      */
     public function delete($id)
     {
-        /** @var Post $post */
-        $post = Post::query()->findOrFail($id);
+        $post = Post::findOrFail($id);
         $post->delete();
+
         return [];
     }
 
+    private function getOne($id)
+    {
+        return Post::withoutGlobalScope(AuthScope::class)
+            ->findOrFail($id);
+    }
 }

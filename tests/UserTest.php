@@ -1,5 +1,8 @@
 <?php
 
+use App\Comment;
+use App\Post;
+use App\Scopes\AuthScope;
 use Illuminate\Support\Facades\Hash;
 
 class UserTest extends TestCase
@@ -84,6 +87,9 @@ class UserTest extends TestCase
         $comment = factory(App\Comment::class)->create([
             'post_id' => $post->id
         ]);
+
+        $post = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+        $comment = Comment::withoutGlobalScope(AuthScope::class)->find($comment->id);
 
         $this->assertEquals([$post->toArray()], $user->posts()->get()->toArray());
         $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());

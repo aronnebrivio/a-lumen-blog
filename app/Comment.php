@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\AuthScope;
 use App\Traits\AuthTrait;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,22 +12,31 @@ class Comment extends Model
 
     protected $fillable = [
         'text',
-        'post_id',
     ];
+
     protected $guarded = [
         'id',
-        'user_id',
     ];
+
+    protected $hidden = [
+        'user_id',
+        'post_id',
+    ];
+
     protected $table = 'comments';
+
+    protected $with = [
+        'user',
+    ];
 
     /* relationships */
     public function post()
     {
-        return $this->belongsTo('App\Post');
+        return $this->belongsTo(Post::class, 'post_id', 'id')->withoutGlobalScope(AuthScope::class);
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }
