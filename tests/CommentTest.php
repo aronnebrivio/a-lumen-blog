@@ -1,6 +1,7 @@
 <?php
 
 use App\Comment;
+use App\Post;
 use App\Scopes\AuthScope;
 
 class CommentTest extends TestCase
@@ -98,6 +99,7 @@ class CommentTest extends TestCase
         $comment = factory(App\Comment::class)->create([
             'post_id' => $post->id
         ]);
+        $post = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
 
         $this->assertEquals([$user->toArray()], $comment->user()->get()->toArray());
         $this->assertEquals([$post->toArray()], $comment->post()->get()->toArray());
