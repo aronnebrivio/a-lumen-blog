@@ -29,7 +29,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'created_at',
     ];
 
+    protected $appends = [
+        'full_name',
+    ];
+
     protected $table = 'users';
+
+    /* mutators */
+    public function getFullNameAttribute()
+    {
+        if ($this->attributes['first_name'] && $this->attributes['last_name'])
+            return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
+        return $this->attributes['email'];
+    }
 
     /* relationships */
     public function posts()
