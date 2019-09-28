@@ -1,5 +1,9 @@
 <?php
 
+use App\Comment;
+use App\Post;
+use App\Scopes\AuthScope;
+
 class PostTest extends TestCase
 {
     public function testGetPosts()
@@ -8,9 +12,11 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
+        $result = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+
         $this->json('GET', '/posts')
             ->seeStatusCode(200)
-            ->seeJsonEquals([$post->toArray()]);
+            ->seeJsonEquals([$result->toArray()]);
     }
 
     public function testGetPost()
@@ -19,9 +25,11 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
+        $result = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+
         $this->get('/posts/' . $post->id)
             ->seeStatusCode(200)
-            ->seeJsonEquals($post->toArray());
+            ->seeJsonEquals($result->toArray());
     }
 
     public function testGetNotExistingPost()
@@ -83,24 +91,6 @@ class PostTest extends TestCase
         $this->post('/posts', ['text' => $sampleText, 'title' => 'tit'])
             ->seeStatusCode(200);
         $this->seeInDatabase('posts', ['user_id' => $user->id, 'text' => $sampleText]);
-    }
-
-    function testGetPostWithComments()
-    {
-        $user = factory(App\User::class)->create();
-        $this->actingAs($user);
-        $post = factory(App\Post::class)->create();
-        $comment = factory(App\Comment::class)->create([
-            'post_id' => $post->id
-        ]);
-
-        $expected = $post;
-        $expected->comments = [
-            $comment
-        ];
-        $this->json('GET', '/posts/' . $post->id, ['comments' => 1])
-            ->seeStatusCode(200)
-            ->seeJsonEquals($expected->toArray());
     }
 
     function testPostCoverage()
