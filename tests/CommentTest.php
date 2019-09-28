@@ -1,5 +1,8 @@
 <?php
 
+use App\Comment;
+use App\Scopes\AuthScope;
+
 class CommentTest extends TestCase
 {
     public function testGetCommentsByPostId()
@@ -8,20 +11,17 @@ class CommentTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
+
         $comment = factory(App\Comment::class)->create([
             'user_id' => $user->id,
             'post_id' => $post->id
         ]);
 
-        $this->json('GET', '/comments/', ['post_id' => $post->id])
-            ->seeStatusCode(200)
-            ->seeJsonEquals([$comment->toArray()]);
-    }
+        $result = Comment::withoutGlobalScope(AuthScope::class)->find($comment->id);
 
-    public function testCommentsNotExistingPost()
-    {
-        $this->json('GET', '/comments/', ['post_id' => 1])
-            ->seeStatusCode(404);
+        $this->json('GET', '/comments', ['post_id' => $post->id])
+            ->seeStatusCode(200)
+            ->seeJsonEquals([$result->toArray()]);
     }
 
     function testCommentEdit()

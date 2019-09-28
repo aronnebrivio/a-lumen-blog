@@ -20,10 +20,9 @@ class CommentController extends BaseController
         $this->validate($request, [
             'post_id' => 'required|integer|min:1',
         ]);
-        $post_id = $request->all()['post_id'];
-        Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
-        return Comment::query()->withoutGlobalScope(AuthScope::class)
-            ->where('post_id', $post_id)
+
+        return Comment::withoutGlobalScope(AuthScope::class)
+            ->where('post_id', $request->all()['post_id'])
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -39,22 +38,26 @@ class CommentController extends BaseController
             'text' => 'required',
             'post_id' => 'required'
         ]);
-        $post_id = $request->all()['post_id'];
-        Post::query()->withoutGlobalScope(AuthScope::class)->findOrFail($post_id);
+
+        $postId = $request->all()['post_id'];
+        Post::withoutGlobalScope(AuthScope::class)->findOrFail($postId);
+
         $comment = new Comment;
         $comment->fill($request->all());
+        $comment->post_id = $postId;
         $comment->save();
-        return $comment;
+
+        return $this->getOne($comment->id);
     }
 
     public function update(Request $request, $id)
     {
         /** @var Comment $comment */
-        $comment = Comment::query()->where('id', $id)->first();
+        $comment = Comment::where('id', $id)->first();
         $comment->fill($request->all());
         $comment->save();
 
-        return $comment;
+        return $this->getOne($comment->id);
     }
 
     /**
@@ -65,8 +68,14 @@ class CommentController extends BaseController
     public function delete($id)
     {
         /** @var Comment $comment */
-        $comment = Comment::query()->findOrFail($id);
+        $comment = Comment::findOrFail($id);
         $comment->delete();
         return [];
+    }
+
+    private function getOne($id)
+    {
+        return Comment::withoutGlobalScope(AuthScope::class)
+            ->findOrFail($id);
     }
 }

@@ -9,9 +9,11 @@ use App\Http\Controllers\CommentController;
 $router->get('/', function () {
     return redirect('https://documenter.getpostman.com/view/4711074/SVmr11U3?version=latest');
 });
+
 $router->get('/version', function () {
     return response('0.9.1', 200);
 });
+
 $router->post('/auth', UserController::class . '@getToken');
 
 $router->group(['prefix' => 'users'], function () use ($router) {
