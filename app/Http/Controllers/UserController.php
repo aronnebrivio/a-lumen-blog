@@ -12,7 +12,7 @@ class UserController extends BaseController
 {
     public function get($id)
     {
-        return User::query()->findOrFail($id);
+        return User::findOrFail($id);
     }
 
     public function getAll()
@@ -33,14 +33,16 @@ class UserController extends BaseController
             'first_name' => 'filled|string',
             'last_name' => 'filled|string',
         ]);
+
         $data = $request->all();
+
         $user = new User;
         $user->fill($data);
         $user->password = Hash::make($data['password']);
         $user->token = str_random(64);
         $user->save();
-        /** @var User $user */
-        $user = User::query()->find($user->id);
+
+        $user = User::find($user->id);
         return $user;
     }
 
@@ -83,9 +85,11 @@ class UserController extends BaseController
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
+
         $data = $request->all();
-        $user = User::query()->where('email', $data['email'])
-            ->first();
+
+        $user = User::where('email', $data['email'])->first();
+
         if ($user) {
             if (Hash::check($data['password'], $user->password)) {
                 return ['id' => $user->id, 'token' => $user->token];
@@ -98,9 +102,10 @@ class UserController extends BaseController
 
     private function checkEmail($email)
     {
-        $nusers = User::query()->where('email', $email)
+        $nusers = User::where('email', $email)
             ->where('id', '<>', Auth::user()->id)
             ->count();
+
         if ($nusers > 0) {
             return false;
         }
