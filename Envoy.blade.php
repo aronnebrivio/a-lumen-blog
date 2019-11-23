@@ -58,14 +58,7 @@
 @endtask
 
 @task('clean_old_releases')
-    # This will list our releases by modification time and delete all but the 3 most recent.
-    purging=$(ls -dt {{ $releases_dir }}/* | tail -n +3);
-
-    if [ "{{ $releases_dir }}" -ne "" ] && [ "{{ $purging }}" -ne "" ]; then
-        echo Purging old releases: $purging;
-        rm -rf $purging;
-    else
-        echo "No releases found for purging at this time";
-    fi
+    echo 'Cleaning old deployments'
+    find . -maxdepth 1 -name "2*" | sort | head -n -3 | xargs rm -Rf
 @endtask
 
