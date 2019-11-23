@@ -50,9 +50,9 @@
 @endtask
 
 @task('clean_workdir')
-    echo 'Cleaning working directory)'
+    echo 'Cleaning working directory'
     cd {{ $new_release_dir }}
-    rm -rf .git .vscode docker tests README.md phpunit.xml -php_cd.dist .gitlab-ci.yml \
+    rm -rf .git .vscode docker tests README.md phpunit.xml .php_cs.dist .gitlab-ci.yml \
         .gitignore Envoy.blade.php .env.ci .dockerignore docker-compose.yml database \
         composer.lock composer.json artisan
 @endtask
