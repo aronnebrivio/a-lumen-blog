@@ -59,6 +59,7 @@
 
 @task('clean_old_releases')
     echo 'Cleaning old deployments'
+    cd {{ $releases_dir }}
     find . -maxdepth 1 -name "2*" | sort | head -n -3 | xargs rm -Rf
 @endtask
 
