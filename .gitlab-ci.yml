@@ -1,4 +1,4 @@
-image: aronnebrivio/php:7.3-envoy
+image: aronnebrivio/php:7.3-composer
 
 services:
   - mysql:5.7
@@ -8,6 +8,10 @@ variables:
   MYSQL_ROOT_PASSWORD: root
   DB_HOST: mysql
   DB_USERNAME: root
+
+cache:
+  paths:
+    - vendor/
 
 stages:
   - test
@@ -31,10 +35,17 @@ deploy_production:
     - chmod 700 ~/.ssh
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
-    - ~/.composer/vendor/bin/envoy run deploy --commit="$CI_COMMIT_SHA"
+    - rm -rf .git tests docker storage
+
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "mkdir -p $APP_DIR/tmp"
+    - scp -r * $DEPLOY_USER@$DEPLOY_SERVER:$APP_DIR/tmp
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "rm -rf $APP_DIR/old"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "if [ -d "$APP_DIR/current" ]; then mv $APP_DIR/current $APP_DIR/old; fi"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "mv $APP_DIR/tmp $APP_DIR/current"
+    - ssh $DEPLOY_USER@$DEPLOY_SERVER "cp $APP_DIR/.env $APP_DIR/current/.env"
   environment:
     name: production
-    url: http://195.110.58.197
+    url: http://blog-backend.aronnebrivio.xyz
   when: on_success
   only:
     - master
