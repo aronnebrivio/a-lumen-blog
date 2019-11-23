@@ -1,12 +1,9 @@
-image: aronnebrivio/php:7.3-envoy
+image: aronnebrivio/php:7.3-composer
 
 services:
   - mysql:5.7
 
 variables:
-  DEPLOY_USER: deployer
-  DEPLOY_SERVER: 195.110.58.197
-  APP_DIR: /var/www/blog-backend
   MYSQL_DATABASE: blog_testing
   MYSQL_ROOT_PASSWORD: root
   DB_HOST: mysql
