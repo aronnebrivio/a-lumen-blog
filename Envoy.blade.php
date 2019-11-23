@@ -13,6 +13,7 @@
     run_composer
     update_symlinks
     migrate
+    clean_workdir
     clean_old_releases
 @endstory
 
@@ -48,14 +49,23 @@
     php artisan migrate --env=production --force;
 @endtask
 
+@task('clean_workdir')
+    echo 'Cleaning working directory)'
+    cd {{ $new_release_dir }}
+    rm -rf .git .vscode docker tests README.md phpunit.xml -php_cd.dist .gitlab-ci.yml \
+        .gitignore Envoy.blade.php .env.ci .dockerignore docker-compose.yml database \
+        composer.lock composer.json artisan
+@endtask
+
 @task('clean_old_releases')
     # This will list our releases by modification time and delete all but the 3 most recent.
     purging=$(ls -dt {{ $releases_dir }}/* | tail -n +3);
 
-    if [ "$releases_dir" -ne "" ] && [ "$purging" -ne "" ]; then
+    if [ "{{ $releases_dir }}" -ne "" ] && [ "{{ $purging }}" -ne "" ]; then
         echo Purging old releases: $purging;
         rm -rf $purging;
     else
         echo "No releases found for purging at this time";
     fi
 @endtask
+
