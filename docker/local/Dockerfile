@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 
 RUN apt-get update
 
@@ -18,6 +18,7 @@ RUN apt-get install -y \
     libreadline-dev \
     libfreetype6-dev \
     libzip-dev \
+    libonig-dev \
     g++ \
     pkg-config \
     build-essential \
@@ -44,7 +45,6 @@ RUN docker-php-ext-install \
     bcmath \
     opcache \
     calendar \
-    mbstring \
     pdo_mysql \
     zip
 

@@ -1,11 +1,11 @@
 # Set the base image for subsequent instructions
-FROM php:7.3
+FROM php:7.4
 
 # Update packages
 RUN apt-get update
 
 # Install PHP and composer dependencies
-RUN apt-get install -qq git curl libmcrypt-dev libjpeg-dev libpng-dev libfreetype6-dev libbz2-dev libzip-dev
+RUN apt-get install -qq git curl libmcrypt-dev libjpeg-dev libpng-dev libonig-dev libfreetype6-dev libbz2-dev libzip-dev
 
 # Clear out the local repository of retrieved package files
 RUN apt-get clean
