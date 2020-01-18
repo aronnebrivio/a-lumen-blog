@@ -7,7 +7,7 @@ services:
     #  args:
     #    uid: ${UID}
     #    xdebug_port: ${XDEBUG_PORT}
-    image: aronnebrivio/php:7.3-dev
+    image: aronnebrivio/php:7.4-dev
     container_name: blog-lumen
     environment:
       - APACHE_RUN_USER=#${UID}
