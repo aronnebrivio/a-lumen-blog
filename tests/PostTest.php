@@ -1,8 +1,8 @@
 <?php
 
-use App\Comment;
 use App\Post;
 use App\Scopes\AuthScope;
+use Illuminate\Support\Str;
 
 class PostTest extends TestCase
 {
@@ -44,7 +44,7 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $newText = str_random(300);
+        $newText = Str::random(300);
 
         $this->put('/posts/' . $post->id, ['text' => $newText])
             ->seeStatusCode(401);
@@ -81,7 +81,7 @@ class PostTest extends TestCase
     function testPostNew()
     {
         $user = factory(App\User::class)->create();
-        $sampleText = str_random(300);
+        $sampleText = Str::random(300);
 
         $this->post('/posts', ['text' => $sampleText, 'title' => 'tit'])
             ->seeStatusCode(401);
