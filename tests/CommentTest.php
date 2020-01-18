@@ -3,6 +3,7 @@
 use App\Comment;
 use App\Post;
 use App\Scopes\AuthScope;
+use Illuminate\Support\Str;
 
 class CommentTest extends TestCase
 {
@@ -35,7 +36,7 @@ class CommentTest extends TestCase
             'user_id' => $user->id,
             'post_id' => $post->id
         ]);
-        $newText = str_random(300);
+        $newText = Str::random(300);
 
         $this->put('/comments/' . $comment->id, ["text" => $newText])
             ->seeStatusCode(401);
@@ -79,7 +80,7 @@ class CommentTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $sampleText = str_random(300);
+        $sampleText = Str::random(300);
 
         $this->post('/comments', ['post_id' => $post->id, 'text' => $sampleText])
             ->seeStatusCode(401);

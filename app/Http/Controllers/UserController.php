@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Routing\Controller as BaseController;
+use Illuminate\Support\Str;
 
 class UserController extends BaseController
 {
@@ -39,7 +40,7 @@ class UserController extends BaseController
         $user = new User;
         $user->fill($data);
         $user->password = Hash::make($data['password']);
-        $user->token = str_random(64);
+        $user->token = Str::random(64);
         $user->save();
 
         $user = User::find($user->id);
