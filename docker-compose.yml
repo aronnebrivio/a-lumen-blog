@@ -31,7 +31,7 @@ services:
   blog-db:
     image: mysql:5.7
     restart: "always"
-    # !IMPORTANT!: This must be the same as DB_HOST variable in .env file
+    # Set DB_HOST variable in .env file to this value to use local environment
     container_name: blog-db
     volumes:
       # The db files are stored in this named volume
