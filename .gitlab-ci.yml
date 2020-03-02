@@ -14,6 +14,11 @@ stages:
   - test
   - deploy
 
+cache:
+  paths:
+    - vendor/
+    - .env
+
 preliminaries:
   stage: preliminaries
   script:
