@@ -10,15 +10,20 @@ variables:
   DB_USERNAME: root
 
 stages:
+  - preliminaries
   - test
   - deploy
 
-unit_test:
-  stage: test
+preliminaries:
+  stage: preliminaries
   script:
     - cp .env.ci .env
     - composer install
     - php artisan migrate
+
+test:
+  stage: test
+  script:
     - vendor/bin/phpunit
 
 deploy_production:
