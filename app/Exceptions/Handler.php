@@ -10,6 +10,7 @@ use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Throwable;
 use UnexpectedValueException;
 
 class Handler extends ExceptionHandler
@@ -33,7 +34,7 @@ class Handler extends ExceptionHandler
      * @param Exception $e
      * @throws Exception
      */
-    public function report(Exception $e)
+    public function report(Throwable $e)
     {
         if (app()->environment('production') && app()->bound('sentry') && $this->shouldReport($e)) {
             app('sentry')->captureException($e);
@@ -49,7 +50,7 @@ class Handler extends ExceptionHandler
      * @param  \Exception $e
      * @return \Illuminate\Http\Response
      */
-    public function render($request, Exception $e)
+    public function render($request, Throwable $e)
     {
         if ($e instanceof ValidationException)
             return response($e->validator->messages()->messages(), 422);
