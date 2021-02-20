@@ -34,3 +34,6 @@ Tests are under `/tests` folder, run it with `phpunit`.
 - [ ] Setup a simple production environment  
 - [ ] Makefile
 - [ ] Containerized infrastructure for server
+
+## License
+Copyright (c) 2020 Aronne Brivio. Released under the MIT License. See [LICENSE](https://github.com/aronnebrivio/a-lumen-blog/blob/master/LICENSE) for details.
