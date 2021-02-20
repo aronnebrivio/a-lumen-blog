@@ -23,8 +23,7 @@ RUN apt-get install -y \
     pkg-config \
     build-essential \
     libmemcached-dev \
-    libmemcached-tools \
-    memcached
+    libmemcached-tools
 
 # 2. apache configs + document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -51,27 +50,13 @@ RUN docker-php-ext-install \
 # 5. composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 6. configuring xdebug
-ARG xdebug_port
-RUN yes | pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_port="$xdebug_port >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_handler=dbgp" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.profiler_enable_trigger=1" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.profiler_output_dir=\"/var/www/profiler\"" >> /usr/local/etc/php/conf.d/xdebug.ini
+# 6. redis
+RUN pecl install redis \
+    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 
-# 7. memcached
-RUN git clone https://github.com/php-memcached-dev/php-memcached.git
-RUN cd php-memcached && phpize && ./configure --disable-memcached-sasl && make -j `cat /proc/cpuinfo | grep processor | wc -l` && make install
-RUN echo 'extension = memcached.so' > /usr/local/etc/php/conf.d/memcached.ini
-
-# 8. we need a user with the same UID/GID with host user
-# so when we execute CLI commands, all the host file's ownership remains intact
-# otherwise command from inside container will create root-owned files and directories
-ARG uid
-RUN useradd -G www-data,root -u $uid -d /home/devuser devuser
-RUN mkdir -p /home/devuser/.composer && \
-    chown -R devuser:devuser /home/devuser
+# 7. configuring xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+ENV XDEBUG_MODE=off
+ENV XDEBUG_START_WITH_REQUEST=yes
+ENV XDEBUG_DISCOVER_CLIENT_HOST=1
