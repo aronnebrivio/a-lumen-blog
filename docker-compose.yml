@@ -1,26 +1,17 @@
 version: "3.5"
-# All parameters used are in .env file
 services:
   blog-lumen:
-    #build:
-    #  context: 'docker/local'
-    #  args:
-    #    uid: ${UID}
-    #    xdebug_port: ${XDEBUG_PORT}
     image: aronnebrivio/php:7.4-dev
     container_name: blog-lumen
     environment:
-      - APACHE_RUN_USER=#${UID}
-      - APACHE_RUN_GROUP=#${UID}
-      - XDEBUG_CONFIG=profiler_enable=${XDEBUG_PROFILER_ENABLED}
-      - XDEBUG_ENABLE=${XDEBUG_ENABLE}
+      - XDEBUG_MODE=${XDEBUG_MODE}
     volumes:
-      # This sync the project folder with PHP image main folder
+      # code
       - .:/var/www/html:cached
-      # XDebug profiler output dir
-      - ./private/profiler:/var/www/profiler:cached
+      # container /tmp folder, used for profiler and other stuff
+      - ./private/tmp:/tmp:cached
+      # lumen logs and cache if CACHE_DRIVER=file. Mounted as a volume to keep persistent
       - /var/www/html/storage
-    command: sh /var/www/html/docker/local/init.sh
     ports:
       - ${PHP_HOST_PORT}:80
     networks:
@@ -46,6 +37,19 @@ services:
       backend:
         aliases:
           - blog-db
+
+  blog-redis:
+    image: redis
+    container_name: blog-redis
+    environment:
+      - REDIS_URL=redis://${REDIS_HOST}:${REDIS_PORT}
+      - REDIS_DATABASE=${REDIS_DATABASE}
+    ports:
+      - ${REDIS_HOST_PORT}:${REDIS_PORT}
+    networks:
+      backend:
+        aliases:
+          - blog-redis
 
 volumes:
   # This could be shared across multiple containers
