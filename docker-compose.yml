@@ -1,7 +1,7 @@
 version: "3.5"
 services:
   blog-lumen:
-    image: aronnebrivio/php:7.4-redis-dev
+    image: aronnebrivio/php:7.4-dev
     container_name: blog-lumen
     environment:
       - XDEBUG_MODE=${XDEBUG_MODE}

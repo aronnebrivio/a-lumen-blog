@@ -21,9 +21,7 @@ RUN apt-get install -y \
     libonig-dev \
     g++ \
     pkg-config \
-    build-essential \
-    libmemcached-dev \
-    libmemcached-tools
+    build-essential
 
 # 2. apache configs + document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
@@ -50,13 +48,8 @@ RUN docker-php-ext-install \
 # 5. composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 6. redis
-RUN pecl install redis \
-    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
-
-# 7. configuring xdebug
+# 6. xdebug
 RUN pecl install xdebug \
     && docker-php-ext-enable xdebug
-ENV XDEBUG_MODE=off
-ENV XDEBUG_START_WITH_REQUEST=yes
-ENV XDEBUG_DISCOVER_CLIENT_HOST=1
+RUN echo "xdebug.start_with_request=yes" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
+RUN echo "xdebug.discover_client_host=1" >> $PHP_INI_DIR/conf.d/docker-php-ext-xdebug.ini
