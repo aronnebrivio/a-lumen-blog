@@ -1,4 +1,6 @@
 # Blog backend
+[![LICENSE](https://img.shields.io/badge/license-MIT-gold.svg)](https://github.com/aronnebrivio/aronnebrivio.github.io/blob/master/LICENSE)
+
 > I'm currently porting this project from Gitlab. I used to automate the deploy with Gitlab CI using [Envoy](https://laravel.com/docs/8.x/envoy). I'll try to use the same approach with Github workflows and, once it will be up and running on a production endpoint, I'll try out new deploy technologies.
 
 [Lumen](https://lumen.laravel.com/) project providing an API to a blog environment, with Users, Posts and Comments.
