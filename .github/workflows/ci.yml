@@ -5,6 +5,7 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: aronnebrivio/php:7.4-dev
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
