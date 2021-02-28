@@ -4,12 +4,14 @@ on: push
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.ci', '.env');"
+        run: cp .env.ci .env
       - name: Install Dependencies
         run: composer install --ignore-platform-reqs
+      - name: Run Migrations
+        run: php artisan migrate
       - name: Run PHPUnit
         run: vendor/bin/phpunit
