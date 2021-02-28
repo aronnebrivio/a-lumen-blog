@@ -10,6 +10,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: blog_testing
         ports:
           - 3306
     steps:
