@@ -21,5 +21,9 @@ jobs:
         run: composer install --ignore-platform-reqs
       - name: Run Migrations
         run: php artisan migrate
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
       - name: Run PHPUnit
         run: vendor/bin/phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
