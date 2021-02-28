@@ -5,13 +5,10 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:5.7
-        ports:
-          - 3306
     steps:
       - uses: actions/checkout@v2
+      - name: Start database server
+        run: sudo /etc/init.d/mysql start
       - name: Copy .env
         run: cp .env.ci .env
       - name: Install Dependencies
