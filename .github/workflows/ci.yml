@@ -5,10 +5,16 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: blog_testing
+        ports:
+          - 3306
     steps:
       - uses: actions/checkout@v2
-      - name: Start database server
-        run: sudo /etc/init.d/mysql start
       - name: Copy .env
         run: cp .env.ci .env
       - name: Install Dependencies
