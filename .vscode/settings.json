@@ -1,0 +1,7 @@
+{
+    "phpunit.phpunit": "/var/www/html/vendor/bin/phpunit",
+    "phpunit.command": "docker-compose run --rm blog-lumen",
+    "phpunit.paths": {
+        "${workspaceFolder}": "/var/www/html"
+    }
+}

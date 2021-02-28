@@ -5,4 +5,7 @@ Homestead.yaml
 .env
 /log
 .phpunit.result.cache
-/.vscode
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
