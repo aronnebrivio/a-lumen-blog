@@ -5,7 +5,11 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: aronnebrivio/php:7.4-dev
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - 3306
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
