@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: cp docker/production/Dockerfile Dockerfile
+      - run: cp environments/production/Dockerfile Dockerfile
 
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
