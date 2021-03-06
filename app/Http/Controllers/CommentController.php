@@ -12,8 +12,10 @@ class CommentController extends BaseController
 {
     /**
      * @param Request $request
-     * @return mixed
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return mixed
      */
     public function getAll(Request $request)
     {
@@ -29,20 +31,22 @@ class CommentController extends BaseController
 
     /**
      * @param Request $request
-     * @return Comment
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return Comment
      */
     public function new(Request $request)
     {
         $this->validate($request, [
             'text' => 'required',
-            'post_id' => 'required'
+            'post_id' => 'required',
         ]);
 
         $postId = $request->all()['post_id'];
         Post::withoutGlobalScope(AuthScope::class)->findOrFail($postId);
 
-        $comment = new Comment;
+        $comment = new Comment();
         $comment->fill($request->all());
         $comment->post_id = $postId;
         $comment->save();
@@ -62,14 +66,17 @@ class CommentController extends BaseController
 
     /**
      * @param $id
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function delete($id)
     {
         /** @var Comment $comment */
         $comment = Comment::findOrFail($id);
         $comment->delete();
+
         return [];
     }
 

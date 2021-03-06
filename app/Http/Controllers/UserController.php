@@ -52,7 +52,7 @@ class UserController extends BaseController
      * @return \Illuminate\Contracts\Auth\Authenticatable|null
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $this->validate($request, [
             'email' => 'filled|email|max:191',
@@ -61,17 +61,23 @@ class UserController extends BaseController
             'password' => 'filled|string|min:6',
         ]);
 
-        if (!$this->checkEmail($request->input('email'))) {
+        if ($this->emailExists($request->input('email'))) {
             return response('The email has already been taken.', 409);
         }
 
         /** @var User $user */
         $user = Auth::user();
+
+        if ($user->id != $id) {
+            return response('User not found', 404);
+        }
+
         $user->fill($request->all());
         if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
         }
         $user->save();
+
         return $user;
     }
 
@@ -101,15 +107,10 @@ class UserController extends BaseController
         return response('User not found', 404);
     }
 
-    private function checkEmail($email)
+    private function emailExists($email)
     {
-        $nusers = User::where('email', $email)
+        return User::where('email', $email)
             ->where('id', '<>', Auth::user()->id)
-            ->count();
-
-        if ($nusers > 0) {
-            return false;
-        }
-        return true;
+            ->exists();
     }
 }

@@ -45,6 +45,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->put('', UserController::class . '@update');
+        $router->put('{id}', UserController::class . '@update');
     });
 });

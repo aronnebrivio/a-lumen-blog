@@ -16,25 +16,26 @@ class PostController extends BaseController
 
     public function getAll()
     {
-        $posts = Post::withoutGlobalScope(AuthScope::class)
+        return Post::withoutGlobalScope(AuthScope::class)
             ->orderBy('created_at', 'desc')
             ->get();
-        return $posts;
     }
 
     /**
      * @param Request $request
-     * @return Post
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return Post
      */
     public function new(Request $request)
     {
         $this->validate($request, [
             'title' => 'required',
-            'text' => 'required'
+            'text' => 'required',
         ]);
 
-        $post = new Post;
+        $post = new Post();
         $post->fill($request->all());
         $post->save();
 
@@ -52,8 +53,10 @@ class PostController extends BaseController
 
     /**
      * @param $id
-     * @return array
+     *
      * @throws \Exception
+     *
+     * @return array
      */
     public function delete($id)
     {
