@@ -34,8 +34,9 @@ Tests are under `/tests` folder, run it with `phpunit`.
 - [X] Review CI Docker environment
 - [X] Use Github workflow
 - [X] Setup a simple production environment  
-- [ ] Makefile
 - [X] Containerized infrastructure for server
+- [ ] Makefile
+- [ ] Pagination
 
 ## License
 Copyright (c) 2020 Aronne Brivio. Released under the MIT License. See [LICENSE](https://github.com/aronnebrivio/a-lumen-blog/blob/master/LICENSE) for details.
