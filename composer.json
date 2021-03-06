@@ -1,8 +1,8 @@
 {
-  "name": "laravel/lumen",
-  "description": "The Laravel Lumen Framework.",
+  "name": "aronnebrivio/a-lumen-blog",
+  "description": "Lumen project providing an API to a blog environment, with Users, Posts and Comments",
   "keywords": [
-    "framework",
+    "blog",
     "laravel",
     "lumen"
   ],
