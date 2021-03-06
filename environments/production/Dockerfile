@@ -49,4 +49,5 @@ RUN rm -rf .github .vscode database environments private tests \
     .dockerignore .gitignore .php_cs.dist artisan captainhook.json Dockerfile docker-compose.yml phpunit.xml
 
 # Start Apache
-CMD ["apache2-foreground"]
+COPY environments/production/run-apache2.sh /usr/local/bin/
+CMD ["run-apache2.sh"]
