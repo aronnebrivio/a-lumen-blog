@@ -5,6 +5,10 @@ use App\Post;
 use App\Scopes\AuthScope;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * @internal
+ * @coversNothing
+ */
 class UserTest extends TestCase
 {
     public function testNewUser()
@@ -22,7 +26,7 @@ class UserTest extends TestCase
         $pwd = 'password';
 
         factory(App\User::class)->create([
-            'email' => $email
+            'email' => $email,
         ]);
         $this->post('/users', ['email' => $email, 'password' => $pwd])
             ->seeStatusCode(422);
@@ -33,7 +37,7 @@ class UserTest extends TestCase
         $user = factory(App\User::class)->create();
         $email = 'test@example.com';
 
-        $this->put('/users', ['email' => $email])
+        $this->put('/users/' . $user->id, ['email' => $email])
             ->seeStatusCode(401);
 
         /*
@@ -42,7 +46,7 @@ class UserTest extends TestCase
             In questo modo è possibile testare il funzionamento del meccanismo di autorizzazione via token,
             senza dover creare un metodo ad-hoc.
         */
-        $this->put('/users', ['email' => $email], ['Authorization' => $user->token])
+        $this->put('/users/' . $user->id, ['email' => $email], ['Authorization' => $user->token])
             ->seeStatusCode(200);
     }
 
@@ -50,7 +54,7 @@ class UserTest extends TestCase
     {
         $password = 'password';
         $user = factory(App\User::class)->create([
-            'password' => Hash::make($password)
+            'password' => Hash::make($password),
         ]);
         $this->post('/auth', ['email' => $user->email, 'password' => $password])
             ->seeStatusCode(200)
@@ -85,7 +89,7 @@ class UserTest extends TestCase
         $this->actingAs($user);
         $post = factory(App\Post::class)->create();
         $comment = factory(App\Comment::class)->create([
-            'post_id' => $post->id
+            'post_id' => $post->id,
         ]);
 
         $post = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
@@ -113,21 +117,24 @@ class UserTest extends TestCase
     public function testUserEditValidation()
     {
         factory(App\User::class)->create([
-            'email' => 'test@email.com'
+            'email' => 'test@email.com',
         ]);
         $user = factory(App\User::class)->create();
 
         $this->actingAs($user);
-        $this->put('/users', ['email' => ''])
+        $this->put('/users/' . $user->id, ['email' => ''])
             ->seeStatusCode(422);
 
-        $this->put('/users', ['email' => 'test'])
+        $this->put('/users/' . $user->id, ['email' => 'test'])
             ->seeStatusCode(422);
 
-        $this->put('/users', ['email' => 'test@email.com'])
+        $this->put('/users/' . $user->id, ['email' => 'test@email.com'])
             ->seeStatusCode(409);
 
-        $this->put('/users', ['email' => 'foo@bar.com'])
+        $this->put('/users/' . ($user->id + 1), ['email' => 'foo@bar.com'])
+            ->seeStatusCode(404);
+
+        $this->put('/users/' . $user->id, ['email' => 'foo@bar.com'])
             ->seeStatusCode(200);
     }
 }

@@ -59,7 +59,6 @@ $app->singleton(
 
 $app->middleware([
     App\Http\Middleware\CORSMiddleware::class,
-    App\Http\Middleware\ParseMultipartFormDataInputForNonPostRequestsMiddleware::class,
 ]);
 
 $app->routeMiddleware([

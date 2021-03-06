@@ -11,7 +11,7 @@ $router->get('', function () {
 });
 
 $router->get('version', function () {
-    return response('0.9.2', 200);
+    return response('1.0', 200);
 });
 
 $router->post('auth', UserController::class . '@getToken');
@@ -45,6 +45,6 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     });
 
     $router->group(['prefix' => 'users'], function () use ($router) {
-        $router->put('', UserController::class . '@update');
+        $router->put('{id}', UserController::class . '@update');
     });
 });

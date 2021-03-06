@@ -1,7 +1,7 @@
 # Blog backend
+[![CI/CD](https://github.com/aronnebrivio/a-lumen-blog/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/aronnebrivio/a-lumen-blog/actions/workflows/ci-cd.yml)
+[![Coverage Status](https://coveralls.io/repos/github/aronnebrivio/a-lumen-blog/badge.svg?branch=master)](https://coveralls.io/github/aronnebrivio/a-lumen-blog?branch=master)
 [![LICENSE](https://img.shields.io/badge/license-MIT-gold.svg)](https://github.com/aronnebrivio/aronnebrivio.github.io/blob/master/LICENSE)
-
-> I'm currently porting this project from Gitlab. I used to automate the deploy with Gitlab CI using [Envoy](https://laravel.com/docs/8.x/envoy). I'll try to use the same approach with Github workflows and, once it will be up and running on a production endpoint, I'll try out new deploy technologies.
 
 [Lumen](https://lumen.laravel.com/) project providing an API to a blog environment, with Users, Posts and Comments.
 
@@ -31,11 +31,12 @@ Tests are under `/tests` folder, run it with `phpunit`.
 - [x] Automated PHP-CS-Fixer
 - [x] Redis cache
 - [x] Clean up local Docker environment
-- [ ] Review CI Docker environment
-- [ ] Use Github workflow
-- [ ] Setup a simple production environment  
+- [X] Review CI Docker environment
+- [X] Use Github workflow
+- [X] Setup a simple production environment  
+- [X] Containerized infrastructure for server
 - [ ] Makefile
-- [ ] Containerized infrastructure for server
+- [ ] Pagination
 
 ## License
 Copyright (c) 2020 Aronne Brivio. Released under the MIT License. See [LICENSE](https://github.com/aronnebrivio/a-lumen-blog/blob/master/LICENSE) for details.

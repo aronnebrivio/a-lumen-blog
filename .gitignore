@@ -2,7 +2,13 @@
 /.idea
 Homestead.json
 Homestead.yaml
-.env
+.env*
+!.env.example
 /log
 .phpunit.result.cache
-/.vscode
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+
+private/tmp

@@ -1,0 +1,55 @@
+name: CI/CD
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: blog_testing
+        ports:
+          - 3306
+    steps:
+      - uses: actions/checkout@v2
+      - name: Copy .env
+        run: cp environments/ci/.env .env
+      - name: Install Dependencies
+        run: composer install --ignore-platform-reqs
+      - name: Run Migrations
+        run: php artisan migrate
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+        env:
+          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+
+      - run: cp environments/production/Dockerfile Dockerfile
+
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          usedocker: true
+          docker_build_args: |
+            DB_HOST
+            DB_DATABASE
+            DB_USERNAME
+            DB_PASSWORD
+        env:
+          DB_HOST: ${{secrets.PROD_DB_HOST}}
+          DB_DATABASE: ${{secrets.PROD_DB_DATABASE}}
+          DB_USERNAME: ${{secrets.PROD_DB_USERNAME}}
+          DB_PASSWORD: ${{secrets.PROD_DB_PASSWORD}}
