@@ -37,7 +37,6 @@ ENV DB_PASSWORD=$DB_PASSWORD
 # Copy source and install dependencies
 WORKDIR /var/www/html
 COPY . /var/www/html
-RUN chown -R www-data:www-data /var/www/html
 RUN mv environments/production/.env .env
 RUN composer install
 
