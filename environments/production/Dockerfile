@@ -50,4 +50,5 @@ RUN rm -rf .github .vscode database environments private tests \
 
 # Start Apache
 COPY environments/production/run-apache2.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/run-apache2.sh
 CMD ["run-apache2.sh"]
