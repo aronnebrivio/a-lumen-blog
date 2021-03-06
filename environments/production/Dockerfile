@@ -4,10 +4,13 @@ FROM php:7.4-apache
 RUN apt-get update
 RUN apt-get install -y git curl libmcrypt-dev libjpeg-dev libpng-dev libonig-dev libfreetype6-dev libbz2-dev libzip-dev
 
-# Apache configs + document root
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+ENV APP_HOME /var/www/html
+
+# Change uid and gid of apache to docker user uid/gid
+RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
+
+# Apache config
+RUN sed -i -e "s/html/html\/public/g" /etc/apache2/sites-enabled/000-default.conf
 
 # mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin-
 RUN a2enmod rewrite headers
@@ -35,8 +38,7 @@ ENV DB_USERNAME=$DB_USERNAME
 ENV DB_PASSWORD=$DB_PASSWORD
 
 # Copy source and install dependencies
-WORKDIR /var/www/html
-COPY . /var/www/html
+COPY . $APP_HOME
 RUN mv environments/production/.env .env
 RUN composer install
 
@@ -46,6 +48,9 @@ RUN php artisan migrate --force
 # Clean
 RUN rm -rf .github .vscode database environments private tests \
     .dockerignore .gitignore .php_cs.dist artisan captainhook.json Dockerfile docker-compose.yml phpunit.xml
+
+# Change ownership of our applications
+RUN chown -R www-data:www-data $APP_HOME
 
 # Start Apache
 COPY environments/production/run-apache2.sh /usr/local/bin/
