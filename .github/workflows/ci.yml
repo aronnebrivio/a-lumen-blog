@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
-        run: cp .env.ci .env
+        run: cp environments/ci/.env .env
       - name: Install Dependencies
         run: composer install --ignore-platform-reqs
       - name: Run Migrations
