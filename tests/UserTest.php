@@ -36,6 +36,7 @@ class UserTest extends TestCase
     {
         $user = factory(App\User::class)->create();
         $email = 'test@example.com';
+        $password = 'password';
 
         $this->put('/users/' . $user->id, ['email' => $email])
             ->seeStatusCode(401);
@@ -46,7 +47,10 @@ class UserTest extends TestCase
             In questo modo è possibile testare il funzionamento del meccanismo di autorizzazione via token,
             senza dover creare un metodo ad-hoc.
         */
-        $this->put('/users/' . $user->id, ['email' => $email], ['Authorization' => $user->token])
+        $this->put('/users/' . $user->id, [
+            'email' => $email,
+            'password' => $password,
+        ], ['Authorization' => $user->token])
             ->seeStatusCode(200);
     }
 
