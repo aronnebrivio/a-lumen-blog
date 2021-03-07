@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Post;
 use App\Scopes\AuthScope;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class PostController extends BaseController
@@ -16,8 +19,7 @@ class PostController extends BaseController
 
     public function getAll()
     {
-        return Post::withoutGlobalScope(AuthScope::class)
-            ->orderBy('created_at', 'desc')
+        return Post::orderBy('created_at', 'desc')
             ->get();
     }
 
@@ -37,6 +39,7 @@ class PostController extends BaseController
 
         $post = new Post();
         $post->fill($request->all());
+        $post->user_id = Auth::user()->id;
         $post->save();
 
         return $this->getOne($post->id);
@@ -44,7 +47,12 @@ class PostController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::find($id);
+
+        if (!Gate::allows('update', $post)) {
+            throw new ModelNotFoundException();
+        }
+
         $post->fill($request->all());
         $post->save();
 
@@ -60,7 +68,12 @@ class PostController extends BaseController
      */
     public function delete($id)
     {
-        $post = Post::findOrFail($id);
+        $post = Post::find($id);
+
+        if (!Gate::allows('delete', $post)) {
+            throw new ModelNotFoundException();
+        }
+
         $post->delete();
 
         return [];
@@ -68,7 +81,6 @@ class PostController extends BaseController
 
     private function getOne($id)
     {
-        return Post::withoutGlobalScope(AuthScope::class)
-            ->findOrFail($id);
+        return Post::findOrFail($id);
     }
 }
