@@ -3,7 +3,6 @@
 use Illuminate\Support\Str;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store
@@ -31,7 +30,6 @@ return [
     */
 
     'stores' => [
-
         'apc' => [
             'driver' => 'apc',
         ],
@@ -66,7 +64,6 @@ return [
             'driver' => 'redis',
             'connection' => env('CACHE_REDIS_CONNECTION', 'default'),
         ],
-
     ],
 
     /*
@@ -84,5 +81,4 @@ return [
         'CACHE_PREFIX',
         Str::slug(env('APP_NAME', 'lumen'), '_') . '_cache'
     ),
-
 ];

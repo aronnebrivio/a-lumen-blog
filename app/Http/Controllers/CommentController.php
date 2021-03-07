@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Comment;
 use App\Post;
 use App\Scopes\AuthScope;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class CommentController extends BaseController
@@ -23,8 +26,7 @@ class CommentController extends BaseController
             'post_id' => 'required|integer|min:1',
         ]);
 
-        return Comment::withoutGlobalScope(AuthScope::class)
-            ->where('post_id', $request->all()['post_id'])
+        return Comment::where('post_id', $request->all()['post_id'])
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -44,10 +46,11 @@ class CommentController extends BaseController
         ]);
 
         $postId = $request->all()['post_id'];
-        Post::withoutGlobalScope(AuthScope::class)->findOrFail($postId);
+        Post::findOrFail($postId);
 
         $comment = new Comment();
         $comment->fill($request->all());
+        $comment->user_id = Auth::user()->id;
         $comment->post_id = $postId;
         $comment->save();
 
@@ -56,8 +59,12 @@ class CommentController extends BaseController
 
     public function update(Request $request, $id)
     {
-        /** @var Comment $comment */
-        $comment = Comment::where('id', $id)->first();
+        $comment = Comment::find($id);
+
+        if (!Gate::allows('update', $comment)) {
+            throw new ModelNotFoundException();
+        }
+
         $comment->fill($request->all());
         $comment->save();
 
@@ -73,8 +80,12 @@ class CommentController extends BaseController
      */
     public function delete($id)
     {
-        /** @var Comment $comment */
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
+
+        if (!Gate::allows('delete', $comment)) {
+            throw new ModelNotFoundException();
+        }
+
         $comment->delete();
 
         return [];
@@ -82,7 +93,6 @@ class CommentController extends BaseController
 
     private function getOne($id)
     {
-        return Comment::withoutGlobalScope(AuthScope::class)
-            ->findOrFail($id);
+        return Comment::findOrFail($id);
     }
 }
