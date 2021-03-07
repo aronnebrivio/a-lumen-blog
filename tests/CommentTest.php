@@ -19,7 +19,7 @@ class CommentTest extends TestCase
             'post_id' => $post->id
         ]);
 
-        $result = Comment::withoutGlobalScope(AuthScope::class)->find($comment->id);
+        $result = Comment::find($comment->id);
 
         $this->json('GET', '/comments', ['post_id' => $post->id])
             ->seeStatusCode(200)
@@ -96,11 +96,14 @@ class CommentTest extends TestCase
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);
-        $post = factory(App\Post::class)->create();
-        $comment = factory(App\Comment::class)->create([
-            'post_id' => $post->id
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id,
         ]);
-        $post = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+        $comment = factory(App\Comment::class)->create([
+            'post_id' => $post->id,
+            'user_id' => $user->id,
+        ]);
+        $post = Post::find($post->id);
 
         $this->assertEquals([$user->toArray()], $comment->user()->get()->toArray());
         $this->assertEquals([$post->toArray()], $comment->post()->get()->toArray());
@@ -110,7 +113,9 @@ class CommentTest extends TestCase
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);
-        $post = factory(App\Post::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id,
+        ]);
 
         $this->post('/comments', ['post_id' => $post->id])
             ->seeStatusCode(422);

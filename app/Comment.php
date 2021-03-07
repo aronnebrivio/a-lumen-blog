@@ -2,14 +2,10 @@
 
 namespace App;
 
-use App\Scopes\AuthScope;
-use App\Traits\AuthTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use AuthTrait;
-
     protected $fillable = [
         'text',
     ];
@@ -29,10 +25,10 @@ class Comment extends Model
         'user',
     ];
 
-    /* relationships */
+    // relationships
     public function post()
     {
-        return $this->belongsTo(Post::class, 'post_id', 'id')->withoutGlobalScope(AuthScope::class);
+        return $this->belongsTo(Post::class, 'post_id', 'id');
     }
 
     public function user()

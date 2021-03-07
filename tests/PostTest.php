@@ -1,7 +1,6 @@
 <?php
 
 use App\Post;
-use App\Scopes\AuthScope;
 use Illuminate\Support\Str;
 
 class PostTest extends TestCase
@@ -12,7 +11,7 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $result = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+        $result = Post::find($post->id);
 
         $this->json('GET', '/posts')
             ->seeStatusCode(200)
@@ -25,7 +24,7 @@ class PostTest extends TestCase
         $post = factory(App\Post::class)->create([
             'user_id' => $user->id
         ]);
-        $result = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
+        $result = Post::find($post->id);
 
         $this->get('/posts/' . $post->id)
             ->seeStatusCode(200)
@@ -52,7 +51,7 @@ class PostTest extends TestCase
         $this->notSeeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
 
         $this->actingAs($user);
-        $this->put('/posts/' . $post->id, ["text" => $newText])
+        $this->put('/posts/' . $post->id, ['text' => $newText])
             ->seeStatusCode(200);
 
         $this->seeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
@@ -97,7 +96,10 @@ class PostTest extends TestCase
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);
-        $post = factory(App\Post::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id,
+        ]);
+
         $this->assertEquals([$user->toArray()], $post->user()->get()->toArray());
     }
 

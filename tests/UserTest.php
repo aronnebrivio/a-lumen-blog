@@ -91,13 +91,16 @@ class UserTest extends TestCase
     {
         $user = factory(App\User::class)->create();
         $this->actingAs($user);
-        $post = factory(App\Post::class)->create();
+        $post = factory(App\Post::class)->create([
+            'user_id' => $user->id,
+        ]);
         $comment = factory(App\Comment::class)->create([
             'post_id' => $post->id,
+            'user_id' => $user->id,
         ]);
 
-        $post = Post::withoutGlobalScope(AuthScope::class)->find($post->id);
-        $comment = Comment::withoutGlobalScope(AuthScope::class)->find($comment->id);
+        $post = Post::find($post->id);
+        $comment = Comment::find($comment->id);
 
         $this->assertEquals([$post->toArray()], $user->posts()->get()->toArray());
         $this->assertEquals([$comment->toArray()], $user->comments()->get()->toArray());
