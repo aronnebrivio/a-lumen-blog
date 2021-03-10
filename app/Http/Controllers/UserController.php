@@ -6,8 +6,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Lumen\Routing\Controller as BaseController;
 use Illuminate\Support\Str;
+use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
 {
@@ -23,8 +23,10 @@ class UserController extends BaseController
 
     /**
      * @param Request $request
-     * @return User
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return User
      */
     public function new(Request $request)
     {
@@ -37,20 +39,22 @@ class UserController extends BaseController
 
         $data = $request->all();
 
-        $user = new User;
+        $user = new User();
         $user->fill($data);
         $user->password = Hash::make($data['password']);
         $user->token = Str::random(64);
         $user->save();
 
-        $user = User::find($user->id);
-        return $user;
+        return User::find($user->id);
     }
 
     /**
      * @param Request $request
-     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     * @param mixed   $id
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return null|\Illuminate\Contracts\Auth\Authenticatable
      */
     public function update(Request $request, $id)
     {
@@ -83,8 +87,10 @@ class UserController extends BaseController
 
     /**
      * @param Request $request
-     * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     *
      * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     public function getToken(Request $request)
     {
@@ -101,6 +107,7 @@ class UserController extends BaseController
             if (Hash::check($data['password'], $user->password)) {
                 return ['id' => $user->id, 'token' => $user->token];
             }
+
             return response('Wrong password', 401);
         }
 
