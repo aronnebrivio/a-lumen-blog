@@ -11,7 +11,7 @@ $router->get('', function () {
 });
 
 $router->get('version', function () {
-    return response('1.0.1', 200);
+    return response('1.0.2', 200);
 });
 
 $router->post('auth', UserController::class . '@getToken');
