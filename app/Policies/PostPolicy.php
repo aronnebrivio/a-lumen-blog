@@ -15,7 +15,7 @@ class PostPolicy
      *
      * @param  User  $user
      * @param  Post  $post
-     * @return bool
+     * @return Response
      */
     public function update(User $user, Post $post)
     {
@@ -29,7 +29,7 @@ class PostPolicy
      *
      * @param  User  $user
      * @param  Post  $post
-     * @return bool
+     * @return Response
      */
     public function delete(User $user, Post $post)
     {
