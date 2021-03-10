@@ -4,9 +4,12 @@ namespace App\Policies;
 
 use App\Comment;
 use App\User;
+use Illuminate\Auth\Access\Response;
 
 class CommentPolicy
 {
+    private $unauthorizedMessage = 'You do not own this comment';
+
     /**
      * Determine if the given comment can be updated by the user.
      *
@@ -16,7 +19,9 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->id === $comment->user_id;
+        return $user->id === $comment->user_id
+            ? Response::allow()
+            : Response::deny($this->unauthorizedMessage);
     }
 
     /**
@@ -28,6 +33,8 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->id === $comment->user_id;
+        return $user->id === $comment->user_id
+            ? Response::allow()
+            : Response::deny($this->unauthorizedMessage);
     }
 }

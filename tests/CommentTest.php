@@ -32,11 +32,16 @@ class CommentTest extends TestCase
     public function testCommentEdit()
     {
         $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
         $post = factory(Post::class)->create([
             'user_id' => $user->id,
         ]);
         $comment = factory(Comment::class)->create([
             'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
+        $comment2 = factory(Comment::class)->create([
+            'user_id' => $user2->id,
             'post_id' => $post->id,
         ]);
         $newText = Str::random(300);
@@ -50,20 +55,33 @@ class CommentTest extends TestCase
         $this->put('comments/' . $comment->id, ['text' => $newText])
             ->seeStatusCode(200);
 
-        $this->put('comments/' . ($comment->id + 1), ['text' => $newText])
+        $this->put('comments/' . ($comment->id + 2), ['text' => $newText])
             ->seeStatusCode(404);
 
         $this->seeInDatabase('comments', ['id' => $comment->id, 'text' => $newText]);
+
+        $user2 = factory(User::class)->create();
+        $comment2 = factory(Comment::class)->create([
+            'user_id' => $user2->id,
+            'post_id' => $post->id,
+        ]);
+        $this->put('comments/' . $comment2->id, ['text' => $newText])
+            ->seeStatusCode(401);
     }
 
     public function testCommentDelete()
     {
         $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
         $post = factory(Post::class)->create([
             'user_id' => $user->id,
         ]);
         $comment = factory(Comment::class)->create([
             'user_id' => $user->id,
+            'post_id' => $post->id,
+        ]);
+        $comment2 = factory(Comment::class)->create([
+            'user_id' => $user2->id,
             'post_id' => $post->id,
         ]);
 
@@ -78,6 +96,9 @@ class CommentTest extends TestCase
 
         $this->delete('comments/' . 1)
             ->seeStatusCode(404);
+
+        $this->delete('comments/' . $comment2->id)
+            ->seeStatusCode(401);
     }
 
     public function testCommentNew()

@@ -44,8 +44,12 @@ class PostTest extends TestCase
     public function testPostEdit()
     {
         $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
         $post = factory(Post::class)->create([
             'user_id' => $user->id,
+        ]);
+        $post2 = factory(Post::class)->create([
+            'user_id' => $user2->id,
         ]);
         $newText = Str::random(300);
 
@@ -58,17 +62,24 @@ class PostTest extends TestCase
         $this->put('posts/' . $post->id, ['text' => $newText])
             ->seeStatusCode(200);
 
-        $this->put('posts/' . ($post->id + 1), ['text' => $newText])
+        $this->put('posts/' . ($post->id + 2), ['text' => $newText])
             ->seeStatusCode(404);
 
         $this->seeInDatabase('posts', ['id' => $post->id, 'text' => $newText]);
+
+        $this->put('posts/' . $post2->id, ['text' => $newText])
+            ->seeStatusCode(401);
     }
 
     public function testPostDelete()
     {
         $user = factory(User::class)->create();
+        $user2 = factory(User::class)->create();
         $post = factory(Post::class)->create([
             'user_id' => $user->id,
+        ]);
+        $post2 = factory(Post::class)->create([
+            'user_id' => $user2->id,
         ]);
 
         $this->delete('posts/' . $post->id)
@@ -82,6 +93,9 @@ class PostTest extends TestCase
 
         $this->delete('posts/1')
             ->seeStatusCode(404);
+
+        $this->delete('posts/' . $post2->id)
+            ->seeStatusCode(401);
     }
 
     public function testPostNew()

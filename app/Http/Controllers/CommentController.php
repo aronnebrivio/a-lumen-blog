@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Post;
-use App\Scopes\AuthScope;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -59,11 +57,9 @@ class CommentController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $comment = Comment::find($id);
+        $comment = Comment::findOrFail($id);
 
-        if (!Gate::allows('update', $comment)) {
-            throw new ModelNotFoundException();
-        }
+        Gate::authorize('update', $comment);
 
         $comment->fill($request->all());
         $comment->save();
@@ -80,11 +76,9 @@ class CommentController extends BaseController
      */
     public function delete($id)
     {
-        $comment = Comment::find($id);
+        $comment = Comment::findOrFail($id);
 
-        if (!Gate::allows('delete', $comment)) {
-            throw new ModelNotFoundException();
-        }
+        Gate::authorize('delete', $comment);
 
         $comment->delete();
 
