@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\ParseMultipartFormDataInputForNonPostRequestsMiddleware;
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -56,6 +58,10 @@ $app->singleton(
 | route or middleware that'll be assigned to some specific routes.
 |
 */
+
+$app->middleware([
+    ParseMultipartFormDataInputForNonPostRequestsMiddleware::class,
+]);
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\AuthMiddleware::class,

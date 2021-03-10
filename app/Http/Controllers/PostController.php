@@ -47,11 +47,9 @@ class PostController extends BaseController
 
     public function update(Request $request, $id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
 
-        if (!Gate::allows('update', $post)) {
-            throw new ModelNotFoundException();
-        }
+        Gate::authorize('update', $post);
 
         $post->fill($request->all());
         $post->save();
@@ -68,11 +66,9 @@ class PostController extends BaseController
      */
     public function delete($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
 
-        if (!Gate::allows('delete', $post)) {
-            throw new ModelNotFoundException();
-        }
+        Gate::authorize('delete', $post);
 
         $post->delete();
 
