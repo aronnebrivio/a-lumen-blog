@@ -5,15 +5,17 @@ services:
     container_name: blog-lumen
     environment:
       - XDEBUG_MODE=${XDEBUG_MODE}
+    user: "www-data:www-data"
     volumes:
       # code
       - .:/var/www/html:cached
       # container /tmp folder, used for profiler and other stuff
       - ./private/tmp:/tmp:cached
       # lumen logs and cache if CACHE_DRIVER=file. Mounted as a volume to keep persistent
-      - /var/www/html/storage
+      # - /var/www/html/storage
     ports:
       - ${PHP_HOST_PORT}:80
+    # command: bash -c "chmod 777 /var/www/html/storage && docker-php-entrypoint apache2-foreground"
     networks:
       backend:
         aliases:

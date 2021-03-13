@@ -9,14 +9,11 @@ ENV APP_HOME /var/www/html
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
 
-# Apache config
-RUN sed -i -e "s/html/html\/public/g" /etc/apache2/sites-enabled/000-default.conf
-
 # mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin-
 RUN a2enmod rewrite headers
 
 # Start with base php config, then add extensions
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
     opcache \
