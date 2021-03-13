@@ -22,6 +22,8 @@ services:
     image: mysql:8
     # Set DB_HOST variable in .env file to this value to use local environment
     container_name: blog-db
+    # needed as of mysql 8
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
       # The db files are stored in this named volume
       - blog-db-data:/var/lib/mysql
