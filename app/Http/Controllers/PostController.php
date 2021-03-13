@@ -6,7 +6,6 @@ use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class PostController extends BaseController
@@ -18,16 +17,6 @@ class PostController extends BaseController
 
     public function getAll()
     {
-        $message = 'prova';
-        Log::emergency($message);
-        Log::alert($message);
-        Log::critical($message);
-        Log::error($message);
-        Log::warning($message);
-        Log::notice($message);
-        Log::info($message);
-        Log::debug($message);
-
         return Post::orderBy('created_at', 'desc')
             ->get();
     }
