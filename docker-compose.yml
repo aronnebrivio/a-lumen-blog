@@ -22,7 +22,7 @@ services:
           - blog-lumen
 
   blog-db:
-    image: mysql:5.7
+    image: mysql:8
     # Set DB_HOST variable in .env file to this value to use local environment
     container_name: blog-db
     volumes:
