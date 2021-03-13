@@ -40,6 +40,9 @@ services:
   blog-redis:
     image: redis
     container_name: blog-redis
+    volumes:
+      # The db files are stored in this named volume
+      - blog-redis-data:/data
     environment:
       - REDIS_URL=redis://${REDIS_HOST}:${REDIS_PORT}
       - REDIS_DATABASE=${REDIS_DATABASE}
@@ -52,6 +55,8 @@ services:
 
 volumes:
   blog-db-data:
+    driver: local
+  blog-redis-data:
     driver: local
 
 networks:
