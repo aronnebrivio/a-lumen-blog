@@ -16,7 +16,7 @@ RUN sed -i -e "s/html/html\/public/g" /etc/apache2/sites-enabled/000-default.con
 RUN a2enmod rewrite headers
 
 # Start with base php config, then add extensions
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
 RUN docker-php-ext-install \
     opcache \
