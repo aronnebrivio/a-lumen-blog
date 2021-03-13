@@ -2,9 +2,10 @@
 /.idea
 Homestead.json
 Homestead.yaml
+
 .env*
 !.env.example
-/log
+
 .phpunit.result.cache
 
 .vscode/*
