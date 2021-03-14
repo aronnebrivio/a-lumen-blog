@@ -13,6 +13,10 @@ jobs:
           MYSQL_DATABASE: blog_testing
         ports:
           - 3306
+      redis:
+        image: redis
+        ports:
+          - 6379
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
@@ -29,6 +33,8 @@ jobs:
         run: vendor/bin/phpunit
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_HOST: redis
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
   deploy:
     runs-on: ubuntu-latest
