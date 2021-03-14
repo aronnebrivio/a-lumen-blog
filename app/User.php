@@ -7,10 +7,12 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
-    use Authenticatable, Authorizable;
+    use Authenticatable;
+    use Authorizable;
 
     protected $fillable = [
         'email',
@@ -35,15 +37,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $table = 'users';
 
-    /* mutators */
+    // mutators
     public function getFullNameAttribute()
     {
-        if ($this->attributes['first_name'] && $this->attributes['last_name'])
+        if ($this->attributes['first_name'] && $this->attributes['last_name']) {
             return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
+        }
+
         return $this->attributes['email'];
     }
 
-    /* relationships */
+    // relationships
     public function posts()
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
@@ -52,5 +56,25 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function comments()
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
+    }
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }
