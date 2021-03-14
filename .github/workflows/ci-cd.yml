@@ -19,6 +19,8 @@ jobs:
         run: cp environments/ci/.env .env
       - name: Install Dependencies
         run: composer install --ignore-platform-reqs
+      - name: Generate JWT Secret
+        run: php artisan jwt:secret
       - name: Run Migrations
         run: php artisan migrate
         env:
@@ -48,8 +50,18 @@ jobs:
             DB_DATABASE
             DB_USERNAME
             DB_PASSWORD
+            REDIS_HOST
+            REDIS_PORT
+            REDIS_DATABASE
+            REDIS_PASSWORD
+            JWT_SECRET
         env:
           DB_HOST: ${{secrets.PROD_DB_HOST}}
           DB_DATABASE: ${{secrets.PROD_DB_DATABASE}}
           DB_USERNAME: ${{secrets.PROD_DB_USERNAME}}
           DB_PASSWORD: ${{secrets.PROD_DB_PASSWORD}}
+          REDIS_HOST: ${{secrets.PROD_REDIS_HOST}}
+          REDIS_PORT: ${{secrets.PROD_REDIS_PORT}}
+          REDIS_DATABASE: ${{secrets.PROD_REDIS_DATABASE}}
+          REDIS_PASSWORD: ${{secrets.PROD_REDIS_PASSWORD}}
+          JWT_SECRET: ${{secrets.PROD_JWT_SECRET}}

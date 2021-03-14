@@ -19,7 +19,7 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('login', AuthController::class . '@login');
     $router->post('logout', AuthController::class . '@logout');
     $router->post('refresh', AuthController::class . '@refresh');
-    $router->post('me', AuthController::class . '@me');
+    $router->get('me', AuthController::class . '@me');
 });
 
 $router->group(['prefix' => 'users'], function () use ($router) {
