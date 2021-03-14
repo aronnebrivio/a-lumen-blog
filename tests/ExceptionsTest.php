@@ -19,7 +19,7 @@ class ExceptionsTest extends TestCase
     public function testErrorEx()
     {
         $user = factory(User::class)->create();
-        $response = $this->call('POST', 'auth', ['email' => $user->email]);
+        $response = $this->call('POST', 'auth/login', ['email' => $user->email]);
 
         $this->assertEquals(422, $response->status());
         $this->assertEquals('{"password":["The password field is required."]}', $response->content());

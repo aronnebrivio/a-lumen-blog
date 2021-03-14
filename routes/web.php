@@ -16,6 +16,8 @@ $router->get('version', function () {
 });
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('register', UserController::class . '@new');
+
     $router->post('login', AuthController::class . '@login');
     $router->post('logout', AuthController::class . '@logout');
     $router->post('refresh', AuthController::class . '@refresh');
@@ -24,7 +26,6 @@ $router->group(['prefix' => 'auth'], function () use ($router) {
 
 $router->group(['prefix' => 'users'], function () use ($router) {
     $router->get('', UserController::class . '@getAll');
-    $router->post('', UserController::class . '@new');
     $router->get('{id}', UserController::class . '@get');
 });
 
