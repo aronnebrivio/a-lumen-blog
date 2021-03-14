@@ -16,6 +16,7 @@
     "laravel/legacy-factories": "^1.1",
     "laravel/lumen-framework": "8.*",
     "sentry/sentry-laravel": "2.*",
+    "tymon/jwt-auth": "^1.0",
     "vlucas/phpdotenv": "5.*"
   },
   "require-dev": {
