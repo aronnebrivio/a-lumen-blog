@@ -11,8 +11,6 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -23,8 +21,9 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Bar',
         ]);
 
-        for ($i = 0; $i < 4; $i++)
+        for ($i = 0; $i < 4; $i++) {
             $users[] = User::factory()->create();
+        }
 
         // Create posts
         $posts = [];
