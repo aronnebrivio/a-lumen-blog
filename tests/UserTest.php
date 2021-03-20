@@ -1,9 +1,8 @@
 <?php
 
-use App\Comment;
-use App\Post;
-use App\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
@@ -29,7 +28,7 @@ class UserTest extends TestCase
         $email = 'test@example.com';
         $pwd = 'password';
 
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => $email,
         ]);
 
@@ -39,7 +38,7 @@ class UserTest extends TestCase
 
     public function testUserUpdate()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $email = 'test@example.com';
         $password = 'password';
 
@@ -57,7 +56,7 @@ class UserTest extends TestCase
         $this->get('users/' . 1)
             ->seeStatusCode(404);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->get('users/' . $user->id)
             ->seeStatusCode(200)
@@ -70,12 +69,12 @@ class UserTest extends TestCase
 
     public function testUserCoverage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
-        $post = factory(Post::class)->create([
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'post_id' => $post->id,
             'user_id' => $user->id,
         ]);
@@ -104,10 +103,10 @@ class UserTest extends TestCase
 
     public function testUserEditValidation()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'test@email.com',
         ]);
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user);
         $this->put('users/' . $user->id, ['email' => ''])

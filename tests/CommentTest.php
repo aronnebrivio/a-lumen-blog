@@ -1,8 +1,8 @@
 <?php
 
-use App\Comment;
-use App\Post;
-use App\User;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Str;
 
 /**
@@ -12,12 +12,12 @@ class CommentTest extends TestCase
 {
     public function testGetCommentsByPostId()
     {
-        $user = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
 
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'user_id' => $user->id,
             'post_id' => $post->id,
         ]);
@@ -31,16 +31,16 @@ class CommentTest extends TestCase
 
     public function testCommentEdit()
     {
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'user_id' => $user->id,
             'post_id' => $post->id,
         ]);
-        $comment2 = factory(Comment::class)->create([
+        $comment2 = Comment::factory()->create([
             'user_id' => $user2->id,
             'post_id' => $post->id,
         ]);
@@ -60,8 +60,8 @@ class CommentTest extends TestCase
 
         $this->seeInDatabase('comments', ['id' => $comment->id, 'text' => $newText]);
 
-        $user2 = factory(User::class)->create();
-        $comment2 = factory(Comment::class)->create([
+        $user2 = User::factory()->create();
+        $comment2 = Comment::factory()->create([
             'user_id' => $user2->id,
             'post_id' => $post->id,
         ]);
@@ -71,16 +71,16 @@ class CommentTest extends TestCase
 
     public function testCommentDelete()
     {
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'user_id' => $user->id,
             'post_id' => $post->id,
         ]);
-        $comment2 = factory(Comment::class)->create([
+        $comment2 = Comment::factory()->create([
             'user_id' => $user2->id,
             'post_id' => $post->id,
         ]);
@@ -103,8 +103,8 @@ class CommentTest extends TestCase
 
     public function testCommentNew()
     {
-        $user = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
         $sampleText = Str::random(300);
@@ -121,12 +121,12 @@ class CommentTest extends TestCase
 
     public function testCommentCoverage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
-        $post = factory(Post::class)->create([
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'post_id' => $post->id,
             'user_id' => $user->id,
         ]);
@@ -138,9 +138,9 @@ class CommentTest extends TestCase
 
     public function testCommentNewValidation()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
-        $post = factory(Post::class)->create([
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
 
