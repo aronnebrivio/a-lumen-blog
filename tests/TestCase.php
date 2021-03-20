@@ -3,7 +3,7 @@
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
@@ -21,7 +21,7 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     {
         parent::setUp();
         Artisan::call('migrate:fresh');
-        foreach (get_declared_classes() as $class) {
+        /*foreach (get_declared_classes() as $class) {
             try {
                 $reflection = new \ReflectionClass($class);
                 if (
@@ -35,6 +35,6 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
                 }
             } catch (ReflectionException $e) {
             }
-        }
+        }*/
     }
 }

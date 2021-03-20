@@ -11,8 +11,9 @@
   "type": "project",
   "require": {
     "php": ">=7.4.0",
-    "laravel/lumen-framework": "^8.0",
+    "doctrine/dbal": "^3.0",
     "illuminate/redis": "^8.28",
+    "laravel/lumen-framework": "^8.0",
     "sentry/sentry-laravel": "2.*",
     "tymon/jwt-auth": "^1.0"
   },

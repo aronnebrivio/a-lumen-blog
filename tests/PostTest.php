@@ -11,8 +11,8 @@ class PostTest extends TestCase
 {
     public function testGetPosts()
     {
-        $user = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
         $result = Post::find($post->id);
@@ -24,8 +24,8 @@ class PostTest extends TestCase
 
     public function testGetPost()
     {
-        $user = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
         $result = Post::find($post->id);
@@ -43,12 +43,12 @@ class PostTest extends TestCase
 
     public function testPostEdit()
     {
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $post2 = factory(Post::class)->create([
+        $post2 = Post::factory()->create([
             'user_id' => $user2->id,
         ]);
         $newText = Str::random(300);
@@ -73,12 +73,12 @@ class PostTest extends TestCase
 
     public function testPostDelete()
     {
-        $user = factory(User::class)->create();
-        $user2 = factory(User::class)->create();
-        $post = factory(Post::class)->create([
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $post2 = factory(Post::class)->create([
+        $post2 = Post::factory()->create([
             'user_id' => $user2->id,
         ]);
 
@@ -100,7 +100,7 @@ class PostTest extends TestCase
 
     public function testPostNew()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $sampleText = Str::random(300);
 
         $this->post('posts', ['text' => $sampleText, 'title' => 'tit'])
@@ -115,9 +115,9 @@ class PostTest extends TestCase
 
     public function testPostCoverage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
-        $post = factory(Post::class)->create([
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
 
@@ -126,7 +126,7 @@ class PostTest extends TestCase
 
     public function testPostNewValidation()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
 
         $this->post('posts')
