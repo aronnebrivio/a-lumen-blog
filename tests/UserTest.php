@@ -1,9 +1,9 @@
 <?php
 
-use App\Comment;
-use App\Post;
-use App\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 /**
  * @internal
@@ -15,8 +15,12 @@ class UserTest extends TestCase
         $email = 'test@example.com';
         $pwd = 'password';
 
-        $this->post('users', ['email' => $email, 'password' => $pwd])
+        $this->notSeeInDatabase('users', ['email' => $email]);
+
+        $this->post('auth/register', ['email' => $email, 'password' => $pwd])
             ->seeStatusCode(200);
+
+        $this->seeInDatabase('users', ['email' => $email]);
     }
 
     public function testDuplicatedUser()
@@ -24,50 +28,27 @@ class UserTest extends TestCase
         $email = 'test@example.com';
         $pwd = 'password';
 
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => $email,
         ]);
-        $this->post('users', ['email' => $email, 'password' => $pwd])
+
+        $this->post('auth/register', ['email' => $email, 'password' => $pwd])
             ->seeStatusCode(422);
     }
 
     public function testUserUpdate()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $email = 'test@example.com';
         $password = 'password';
 
         $this->put('users/' . $user->id, ['email' => $email])
             ->seeStatusCode(401);
 
-        /*
-            UPDATE
-            Al posto di usare actingAs() viene passato il token nell'header della richiesta.
-            In questo modo è possibile testare il funzionamento del meccanismo di autorizzazione via token,
-            senza dover creare un metodo ad-hoc.
-        */
-        $this->put('users/' . $user->id, [
-            'email' => $email,
-            'password' => $password,
-        ], ['Authorization' => $user->token])
+        // NOTE: in order to make logout() function working we have to pass the JWT token -> can't use standard actingAs function
+        $token = JWTAuth::fromUser($user);
+        $this->put('users/' . $user->id . '?token=' . $token, ['email' => $email, 'password' => $password])
             ->seeStatusCode(200);
-    }
-
-    public function testGetToken()
-    {
-        $password = 'password';
-        $user = factory(User::class)->create([
-            'password' => Hash::make($password),
-        ]);
-        $this->post('auth', ['email' => $user->email, 'password' => $password])
-            ->seeStatusCode(200)
-            ->seeJsonEquals(['id' => $user->id, 'token' => $user->token]);
-
-        $this->post('auth', ['email' => $user->email, 'password' => 'wrong'])
-            ->seeStatusCode(401);
-
-        $this->post('auth', ['email' => 'wrong@email.com', 'password' => 'wrong'])
-            ->seeStatusCode(404);
     }
 
     public function testUserControllerCoverage()
@@ -75,9 +56,9 @@ class UserTest extends TestCase
         $this->get('users/' . 1)
             ->seeStatusCode(404);
 
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
-        $this->get('users/' . 1)
+        $this->get('users/' . $user->id)
             ->seeStatusCode(200)
             ->seeJsonEquals($user->toArray());
 
@@ -88,12 +69,12 @@ class UserTest extends TestCase
 
     public function testUserCoverage()
     {
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
         $this->actingAs($user);
-        $post = factory(Post::class)->create([
+        $post = Post::factory()->create([
             'user_id' => $user->id,
         ]);
-        $comment = factory(Comment::class)->create([
+        $comment = Comment::factory()->create([
             'post_id' => $post->id,
             'user_id' => $user->id,
         ]);
@@ -107,25 +88,25 @@ class UserTest extends TestCase
 
     public function testUserNewValidation()
     {
-        $this->post('users')
+        $this->post('auth/register')
             ->seeStatusCode(422);
 
-        $this->post('users', ['email' => 'test', 'password' => 'password'])
+        $this->post('auth/register', ['email' => 'test', 'password' => 'password'])
             ->seeStatusCode(422);
 
-        $this->post('users', ['email' => 'test@email.com'])
+        $this->post('auth/register', ['email' => 'test@email.com'])
             ->seeStatusCode(422);
 
-        $this->post('users', ['email' => 'test@email.com', 'password' => 'password'])
+        $this->post('auth/register', ['email' => 'test@email.com', 'password' => 'password'])
             ->seeStatusCode(200);
     }
 
     public function testUserEditValidation()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'test@email.com',
         ]);
-        $user = factory(User::class)->create();
+        $user = User::factory()->create();
 
         $this->actingAs($user);
         $this->put('users/' . $user->id, ['email' => ''])

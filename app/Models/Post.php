@@ -1,13 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class Post extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'text',
+        'title',
     ];
 
     protected $guarded = [
@@ -16,19 +20,22 @@ class Comment extends Model
 
     protected $hidden = [
         'user_id',
-        'post_id',
     ];
 
-    protected $table = 'comments';
+    protected $table = 'posts';
 
     protected $with = [
         'user',
     ];
 
+    protected $withCount = [
+        'comments',
+    ];
+
     // relationships
-    public function post()
+    public function comments()
     {
-        return $this->belongsTo(Post::class, 'post_id', 'id');
+        return $this->hasMany(Comment::class, 'post_id');
     }
 
     public function user()

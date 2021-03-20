@@ -24,15 +24,31 @@ RUN docker-php-ext-install \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Redis
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
 # Load environment variables from build args
 ARG DB_HOST
 ARG DB_DATABASE
 ARG DB_USERNAME
 ARG DB_PASSWORD
+ARG REDIS_HOST
+ARG REDIS_PORT
+ARG REDIS_DATABASE
+ARG REDIS_PASSWORD
+ARG JWT_SECRET
+
 ENV DB_HOST=$DB_HOST
 ENV DB_DATABASE=$DB_DATABASE
 ENV DB_USERNAME=$DB_USERNAME
 ENV DB_PASSWORD=$DB_PASSWORD
+ENV REDIS_HOST=$REDIS_HOST
+ENV REDIS_PORT=$REDIS_PORT
+ENV REDIS_DATABASE=$REDIS_DATABASE
+ENV REDIS_PASSWORD=$REDIS_PASSWORD
+ENV JWT_SECRET=$JWT_SECRET
 
 # Copy source and install dependencies
 COPY . $APP_HOME

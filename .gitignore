@@ -12,4 +12,4 @@ Homestead.yaml
 !.vscode/settings.json
 !.vscode/launch.json
 
-private/tmp
+/private/tmp

@@ -7,26 +7,33 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: blog_testing
         ports:
           - 3306
+      redis:
+        image: redis
+        ports:
+          - 6379
     steps:
       - uses: actions/checkout@v2
       - name: Copy .env
         run: cp environments/ci/.env .env
       - name: Install Dependencies
         run: composer install --ignore-platform-reqs
+      - name: Generate JWT Secret
+        run: php artisan jwt:secret
       - name: Run Migrations
         run: php artisan migrate
         env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       - name: Run PHPUnit
         run: vendor/bin/phpunit
         env:
-          DB_PORT: ${{ job.services.mysql.ports[3306] }}
+          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,8 +55,18 @@ jobs:
             DB_DATABASE
             DB_USERNAME
             DB_PASSWORD
+            REDIS_HOST
+            REDIS_PORT
+            REDIS_DATABASE
+            REDIS_PASSWORD
+            JWT_SECRET
         env:
           DB_HOST: ${{secrets.PROD_DB_HOST}}
           DB_DATABASE: ${{secrets.PROD_DB_DATABASE}}
           DB_USERNAME: ${{secrets.PROD_DB_USERNAME}}
           DB_PASSWORD: ${{secrets.PROD_DB_PASSWORD}}
+          REDIS_HOST: ${{secrets.PROD_REDIS_HOST}}
+          REDIS_PORT: ${{secrets.PROD_REDIS_PORT}}
+          REDIS_DATABASE: ${{secrets.PROD_REDIS_DATABASE}}
+          REDIS_PASSWORD: ${{secrets.PROD_REDIS_PASSWORD}}
+          JWT_SECRET: ${{secrets.PROD_JWT_SECRET}}

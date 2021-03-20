@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
@@ -42,7 +41,6 @@ class UserController extends BaseController
         $user = new User();
         $user->fill($data);
         $user->password = Hash::make($data['password']);
-        $user->token = Str::random(64);
         $user->save();
 
         return User::find($user->id);
@@ -79,39 +77,11 @@ class UserController extends BaseController
         $user->fill($request->all());
         if ($request->input('password')) {
             $user->password = Hash::make($request->input('password'));
+            Auth::logout();
         }
         $user->save();
 
         return $user;
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     *
-     * @return array|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
-     */
-    public function getToken(Request $request)
-    {
-        $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        $data = $request->all();
-
-        $user = User::where('email', $data['email'])->first();
-
-        if ($user) {
-            if (Hash::check($data['password'], $user->password)) {
-                return ['id' => $user->id, 'token' => $user->token];
-            }
-
-            return response('Wrong password', 401);
-        }
-
-        return response('User not found', 404);
     }
 
     private function emailExists($email)

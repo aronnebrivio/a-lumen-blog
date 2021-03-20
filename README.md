@@ -15,6 +15,7 @@ Documentation can be found [here](https://documenter.getpostman.com/view/4711074
 - Create `.env` file with `cp .env.example .env` and fill all missing variables
 - Start Lumen and Database containers with `docker-compose up -d`
 - Install required dependencies with `docker exec -it blog-lumen bash -c "composer install"`
+- Generate JWT Secret with `docker exec -it blog-lumen bash -c "php artisan jwt:secret"`
 - Run migrations with `docker exec -it blog-lumen bash -c "php artisan migrate:fresh --seed"`
 - Profit
 
