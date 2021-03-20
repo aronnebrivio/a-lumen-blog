@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
@@ -14,11 +15,17 @@ $router->get('version', function () {
     return response('1.0.3', 200);
 });
 
-$router->post('auth', UserController::class . '@getToken');
+$router->group(['prefix' => 'auth'], function () use ($router) {
+    $router->post('register', UserController::class . '@new');
+
+    $router->post('login', AuthController::class . '@login');
+    $router->post('logout', AuthController::class . '@logout');
+    $router->post('refresh', AuthController::class . '@refresh');
+    $router->get('me', AuthController::class . '@me');
+});
 
 $router->group(['prefix' => 'users'], function () use ($router) {
     $router->get('', UserController::class . '@getAll');
-    $router->post('', UserController::class . '@new');
     $router->get('{id}', UserController::class . '@get');
 });
 

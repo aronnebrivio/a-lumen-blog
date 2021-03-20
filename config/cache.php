@@ -62,7 +62,13 @@ return [
 
         'redis' => [
             'driver' => 'redis',
-            'connection' => env('CACHE_REDIS_CONNECTION', 'default'),
+            'client' => env('REDIS_CLIENT', 'phpredis'),
+            'default' => [
+                'host' => env('REDIS_HOST', '127.0.0.1'),
+                'password' => env('REDIS_PASSWORD', null),
+                'port' => env('REDIS_PORT', 6379),
+                'database' => env('REDIS_DATABASE', 0),
+            ],
         ],
     ],
 
