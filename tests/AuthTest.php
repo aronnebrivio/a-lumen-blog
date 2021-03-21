@@ -28,13 +28,11 @@ class AuthTest extends TestCase
             ->seeStatusCode(401);
     }
 
-    /*
-     * FIXME: doesn't retrieve the token
     public function testLogout()
     {
-        $user = User::factory()->create();
-        // $this->actingAs($user);
+        $this->refreshApplication();
 
+        $user = User::factory()->create();
         // NOTE: in order to make logout() function working we have to pass the JWT token -> can't use standard actingAs function
         $token = JWTAuth::fromUser($user);
 
@@ -45,15 +43,16 @@ class AuthTest extends TestCase
 
     public function testRefresh()
     {
+        $this->refreshApplication();
+
         $user = User::factory()->create();
         // NOTE: in order to make logout() function working we have to pass the JWT token -> can't use standard actingAs function
         $token = JWTAuth::fromUser($user);
 
-        $this->post('auth/refresh', [], ['Authorization' => 'Bearer ' . $token])
+        $this->json('POST', 'auth/refresh', [], ['Authorization' => 'Bearer ' . $token])
             ->seeStatusCode(200)
             ->seeJson(['token_type' => 'bearer']);
     }
-    */
 
     public function testMe()
     {
