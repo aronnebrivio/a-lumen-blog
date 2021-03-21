@@ -49,7 +49,7 @@ class AuthTest extends TestCase
         // NOTE: in order to make logout() function working we have to pass the JWT token -> can't use standard actingAs function
         $token = JWTAuth::fromUser($user);
 
-        $this->json('POST', 'auth/refresh', [], ['Authorization' => 'Bearer ' . $token])
+        $this->post('auth/refresh', [], ['Authorization' => 'Bearer ' . $token])
             ->seeStatusCode(200)
             ->seeJson(['token_type' => 'bearer']);
     }
