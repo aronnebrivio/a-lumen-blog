@@ -47,7 +47,7 @@ class UserTest extends TestCase
 
         // NOTE: in order to make logout() function working we have to pass the JWT token -> can't use standard actingAs function
         $token = JWTAuth::fromUser($user);
-        $this->put('users/' . $user->id . '?token=' . $token, ['email' => $email, 'password' => $password])
+        $this->put('users/' . $user->id, ['email' => $email, 'password' => $password], ['Authorization' => 'Bearer ' . $token])
             ->seeStatusCode(200);
     }
 
