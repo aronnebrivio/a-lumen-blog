@@ -24,7 +24,11 @@ APIs will be available at `http://localhost:PHP_HOST_PORT`, where `PHP_HOST_PORT
 You can enable or disable XDebug using the `XDEBUG_MODE` environment variable.  
 
 ## Test
-Tests are under `/tests` folder, run it with `phpunit`.
+Tests are under `/tests` folder, run it with `phpunit`:   
+```bash
+docker-compose run --rm blog-lumen /var/www/html/vendor/bin/phpunit --coverage-html /tmp --colors=always -c /var/www/html/phpunit.xml --testsuite 'Application Test Suite'
+```
+
 
 ## ToDo
 - [x] Upgrade to Lumen 8.x
@@ -32,10 +36,10 @@ Tests are under `/tests` folder, run it with `phpunit`.
 - [x] Automated PHP-CS-Fixer
 - [x] Redis cache
 - [x] Clean up local Docker environment
-- [X] Review CI Docker environment
-- [X] Use Github workflow
-- [X] Setup a simple production environment  
-- [X] Containerized infrastructure for server
+- [x] Review CI Docker environment
+- [x] Use Github workflow
+- [x] Setup a simple production environment  
+- [x] Containerized infrastructure for server
 - [ ] Makefile
 - [ ] Pagination
 
