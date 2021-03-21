@@ -10,14 +10,6 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class AuthController extends BaseController
 {
     /**
-     * Create a new AuthController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login']]);
-    }
-
-    /**
      * Get a JWT via given credentials.
      *
      * @param Request $request
@@ -53,9 +45,11 @@ class AuthController extends BaseController
     /**
      * Log the user out (Invalidate the token).
      *
+     * @param Request $request
+     *
      * @return JsonResponse
      */
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
 

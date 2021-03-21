@@ -24,6 +24,10 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * Original Gist at:
  *   https://gist.github.com/jas-/5c3fdc26fedd11cb9fb5#file-class-stream-php
  */
+
+/**
+ * @codeCoverageIgnore
+ */
 class ParseInputStream
 {
     /**

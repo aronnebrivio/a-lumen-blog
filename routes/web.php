@@ -17,11 +17,7 @@ $router->get('version', function () {
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
     $router->post('register', UserController::class . '@new');
-
     $router->post('login', AuthController::class . '@login');
-    $router->post('logout', AuthController::class . '@logout');
-    $router->post('refresh', AuthController::class . '@refresh');
-    $router->get('me', AuthController::class . '@me');
 });
 
 $router->group(['prefix' => 'users'], function () use ($router) {
@@ -53,5 +49,11 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     $router->group(['prefix' => 'users'], function () use ($router) {
         $router->put('{id}', UserController::class . '@update');
+    });
+
+    $router->group(['prefix' => 'auth'], function () use ($router) {
+        $router->post('logout', AuthController::class . '@logout');
+        $router->post('refresh', AuthController::class . '@refresh');
+        $router->get('me', AuthController::class . '@me');
     });
 });
