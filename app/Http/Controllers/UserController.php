@@ -10,11 +10,23 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class UserController extends BaseController
 {
+    /**
+     * @param int|string $id
+     *
+     * @throws \Exception
+     *
+     * @return User
+     */
     public function get($id)
     {
         return User::findOrFail($id);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection|User[]
+     *
+     * @psalm-return \Illuminate\Database\Eloquent\Collection|array<array-key, User>
+     */
     public function getAll()
     {
         return User::all();
@@ -52,7 +64,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return null|\Illuminate\Contracts\Auth\Authenticatable
+     * @return User|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     public function update(Request $request, $id)
     {
@@ -84,6 +96,11 @@ class UserController extends BaseController
         return $user;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return bool
+     */
     private function emailExists($email)
     {
         return User::where('email', $email)

@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -30,15 +30,15 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param Exception $e
+     * @param Throwable $e
      *
-     * @throws Exception
+     * @throws Throwable
      */
     public function report(Throwable $e)
     {
         // Ignoring this block because only applies on production environment
         // @codeCoverageIgnoreStart
-        if (app()->environment('production') && app()->bound('sentry') && $this->shouldReport($e)) {
+        if (App::environment(['production']) && app()->bound('sentry') && $this->shouldReport($e)) {
             app('sentry')->captureException($e);
         }
         // @codeCoverageIgnoreEnd
@@ -50,9 +50,9 @@ class Handler extends ExceptionHandler
      * Render an exception into an HTTP response.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Exception               $e
+     * @param \Throwable               $e
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
      */
     public function render($request, Throwable $e)
     {
@@ -71,7 +71,7 @@ class Handler extends ExceptionHandler
 
         // Ignoring this block because only applies if an error is not handled (like 500 server errors)
         // @codeCoverageIgnoreStart
-        return response($e->getMessage(), $e->getCode() ?: 500);
+        return response($e->getMessage(), $e->getCode() > 0 ? $e->getCode() : 500);
         // @codeCoverageIgnoreEnd
     }
 }

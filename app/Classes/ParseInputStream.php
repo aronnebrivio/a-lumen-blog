@@ -32,6 +32,8 @@ class ParseInputStream
 {
     /**
      * @abstract Raw input stream
+     *
+     * @var false|string
      */
     protected $input;
 
@@ -46,7 +48,7 @@ class ParseInputStream
 
         $boundary = $this->boundary();
 
-        if (!strlen($boundary)) {
+        if (!$boundary || !strlen($boundary)) {
             $data = [
                 'parameters' => $this->parse(),
                 'files' => [],
@@ -62,9 +64,10 @@ class ParseInputStream
 
     /**
      * @function boundary
-     * @returns string
+     *
+     * @return null|string
      */
-    private function boundary()
+    private function boundary(): ?string
     {
         if (!isset($_SERVER['CONTENT_TYPE'])) {
             return null;
@@ -81,11 +84,12 @@ class ParseInputStream
 
     /**
      * @function parse
-     * @returns array
+     *
+     * @return array
      */
-    private function parse()
+    private function parse(): array
     {
-        parse_str(urldecode($this->input), $result);
+        parse_str(urldecode($this->input ?? ''), $result);
 
         return $result;
     }
@@ -93,12 +97,15 @@ class ParseInputStream
     /**
      * @function split
      *
-     * @param $boundary string
-     * @returns array
+     * @param null|string $boundary
+     *
+     * @return false|string[]
+     *
+     * @psalm-return false|list<string>
      */
-    private function split($boundary)
+    private function split(?string $boundary)
     {
-        $result = preg_split("/-+{$boundary}/", $this->input);
+        $result = preg_split("/-+{$boundary}/", $this->input ?? '');
         array_pop($result);
 
         return $result;
@@ -107,10 +114,11 @@ class ParseInputStream
     /**
      * @function blocks
      *
-     * @param $array array
-     * @returns array
+     * @param false|string[] $array
+     *
+     * @return array
      */
-    private function blocks($array)
+    private function blocks($array): array
     {
         $results = [];
 
@@ -137,9 +145,12 @@ class ParseInputStream
      * @function decide
      *
      * @param $string string
-     * @returns array
+     *
+     * @return array[]
+     *
+     * @psalm-return array{parameters: array, files: array}
      */
-    private function decide($string)
+    private function decide(string $string): array
     {
         if (strpos($string, 'application/octet-stream') !== false) {
             return [
@@ -164,11 +175,13 @@ class ParseInputStream
     /**
      * @function file
      *
-     * @param $string
+     * @param $string string
      *
-     * @return array
+     * @return string[]
+     *
+     * @psalm-return array<array-key|string, string>
      */
-    private function file($string)
+    private function file(string $string): array
     {
         preg_match('/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s', $string, $match);
 
@@ -183,9 +196,11 @@ class ParseInputStream
      * @param $string
      * @param mixed $data
      *
-     * @return array
+     * @return UploadedFile[]
+     *
+     * @psalm-return array<string, UploadedFile>
      */
-    private function file_stream($data)
+    private function file_stream($data): array
     {
         $result = [];
         $data = ltrim($data);
@@ -223,10 +238,9 @@ class ParseInputStream
             }
 
             if (substr($data, -2) === "\r\n") {
-                $data = substr($data, 0, -2);
             }
 
-            $path = sys_get_temp_dir() . '/php' . substr(sha1(rand()), 0, 6);
+            $path = sys_get_temp_dir() . '/php' . substr(sha1((string)rand()), 0, 6);
 
             $bytes = file_put_contents($path, $content);
 
@@ -244,9 +258,11 @@ class ParseInputStream
      *
      * @param $string
      *
-     * @return array
+     * @return (string|string[])[]
+     *
+     * @psalm-return array<string, non-empty-list<string>|string>
      */
-    private function parameter($string)
+    private function parameter(string $string): array
     {
         $data = [];
 
@@ -261,61 +277,9 @@ class ParseInputStream
         return $data;
     }
 
-    /**
-     * @function merge
-     *
-     * @param $array array
-     *
-     * Ugly ugly ugly
-     *
-     * @returns array
-     */
-    private function merge($array)
-    {
-        $results = [
-            'parameters' => [],
-            'files' => [],
-        ];
-
-        if (count($array['parameters']) > 0) {
-            foreach ($array['parameters'] as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (is_array($v)) {
-                        foreach ($v as $kk => $vv) {
-                            $results['parameters'][$k][] = $vv;
-                        }
-                    } else {
-                        $results['parameters'][$k] = $v;
-                    }
-                }
-            }
-        }
-
-        if (count($array['files']) > 0) {
-            foreach ($array['files'] as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (is_array($v)) {
-                        foreach ($v as $kk => $vv) {
-                            if (is_array($vv) && (count($vv) === 1)) {
-                                $results['files'][$k][$kk] = $vv[0];
-                            } else {
-                                $results['files'][$k][$kk][] = $vv[0];
-                            }
-                        }
-                    } else {
-                        $results['files'][$k][$key] = $v;
-                    }
-                }
-            }
-        }
-
-        return $results;
-    }
-
-    public function parse_parameter(&$params, $parameter, $value)
+    public function parse_parameter(array &$params, string $parameter, $value): void
     {
         if (strpos($parameter, '[') !== false) {
-            $matches = [];
             if (preg_match('/^([^[]*)\[([^]]*)\](.*)$/', $parameter, $match)) {
                 $name = $match[1];
                 $key = $match[2];

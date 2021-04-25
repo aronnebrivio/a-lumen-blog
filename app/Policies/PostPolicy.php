@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\Response;
 
 class PostPolicy
 {
-    private $unauthorizedMessage = 'You do not own this post';
+    private string $unauthorizedMessage = 'You do not own this post';
 
     /**
      * Determine if the given post can be updated by the user.

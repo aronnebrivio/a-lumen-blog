@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
+use Laravel\Lumen\Testing\DatabaseMigrations;
 
 abstract class TestCase extends Laravel\Lumen\Testing\TestCase
 {
+    use DatabaseMigrations;
+
     /**
      * Creates the application.
      *
@@ -12,11 +14,5 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     public function createApplication()
     {
         return require __DIR__ . '/../bootstrap/app.php';
-    }
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        Artisan::call('migrate:fresh');
     }
 }

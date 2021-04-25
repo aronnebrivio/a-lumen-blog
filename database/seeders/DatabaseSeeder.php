@@ -11,10 +11,13 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run()
+    public function run(): void
     {
         // Create users
+        $users = [];
         $users[] = User::factory()->create([
             'email' => 'testblog.aronnebrivio@dispostable.com',
             'first_name' => 'Foo',

@@ -28,6 +28,6 @@ class Init extends Migration
 
     private function doMigration()
     {
-        return App::environment(['local', 'testing']);
+        return App::environment(['local']);
     }
 }

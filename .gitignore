@@ -13,3 +13,4 @@ Homestead.yaml
 !.vscode/launch.json
 
 /private/tmp
+/database/database.sqlite
