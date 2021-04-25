@@ -14,6 +14,10 @@ class ParseMultipartFormDataInputForNonPostRequestsMiddleware
      * This middleware converts all multi-part/form-data for NON-POST requests, into a properly formatted
      * request variable for Laravel 5.6. It uses the ParseInputStream class, found here:
      * https://gist.github.com/devmycloud/df28012101fbc55d8de1737762b70348
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure $next
+     * @return mixed
      */
     public function handle($request, Closure $next)
     {

@@ -8,16 +8,17 @@ use Illuminate\Auth\Access\Response;
 
 class CommentPolicy
 {
-    private $unauthorizedMessage = 'You do not own this comment';
+    private string $unauthorizedMessage = 'You do not own this comment';
 
     /**
      * Determine if the given comment can be updated by the user.
      *
-     * @param  User  $user
-     * @param  Comment  $comment
-     * @return bool
+     * @param User  $user
+     * @param Comment  $comment
+     *
+     * @return Response
      */
-    public function update(User $user, Comment $comment)
+    public function update(User $user, Comment $comment): Response
     {
         return $user->id === $comment->user_id
             ? Response::allow()
@@ -27,11 +28,12 @@ class CommentPolicy
     /**
      * Determine if the given comment can be deleted by the user.
      *
-     * @param  User  $user
-     * @param  Comment  $comment
-     * @return bool
+     * @param User  $user
+     * @param Comment  $comment
+     *
+     * @return Response
      */
-    public function delete(User $user, Comment $comment)
+    public function delete(User $user, Comment $comment): Response
     {
         return $user->id === $comment->user_id
             ? Response::allow()

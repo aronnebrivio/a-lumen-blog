@@ -39,7 +39,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $table = 'users';
 
     // mutators
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         if ($this->attributes['first_name'] && $this->attributes['last_name']) {
             return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
@@ -49,12 +49,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     // relationships
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
-    public function comments()
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
     }

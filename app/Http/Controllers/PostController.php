@@ -10,6 +10,13 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 
 class PostController extends BaseController
 {
+    /**
+     * @param int|string $id
+     *
+     * @throws \Exception
+     *
+     * @return Post
+     */
     public function get($id)
     {
         return $this->getOne($id);
@@ -43,6 +50,14 @@ class PostController extends BaseController
         return $this->getOne($post->id);
     }
 
+    /**
+     * @param Request $request
+     * @param int|string $id
+     *
+     * @throws \Exception
+     *
+     * @return Post
+     */
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
@@ -56,7 +71,7 @@ class PostController extends BaseController
     }
 
     /**
-     * @param $id
+     * @param int|string $id
      *
      * @throws \Exception
      *
@@ -73,6 +88,13 @@ class PostController extends BaseController
         return [];
     }
 
+    /**
+     * @param int|string $id
+     *
+     * @throws \Exception
+     *
+     * @return Post
+     */
     private function getOne($id)
     {
         return Post::findOrFail($id);

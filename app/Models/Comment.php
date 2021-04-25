@@ -29,12 +29,12 @@ class Comment extends Model
     ];
 
     // relationships
-    public function post()
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Post::class, 'post_id', 'id');
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
