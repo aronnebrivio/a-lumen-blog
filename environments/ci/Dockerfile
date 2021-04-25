@@ -1,28 +1,7 @@
-FROM php:7.4-apache
-
-# Install PHP and composer dependencies
-RUN apt-get update
-RUN apt-get install -y git curl libmcrypt-dev libjpeg-dev libpng-dev libonig-dev libfreetype6-dev libbz2-dev libzip-dev zip unzip
-
-ENV APP_HOME /var/www/html
+FROM aronnebrivio/php:7.4-base
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
-
-# mod_rewrite for URL rewrite and mod_headers for .htaccess extra headers like Access-Control-Allow-Origin-
-RUN a2enmod rewrite headers
-
-# Start with base php config, then add extensions
-RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
-
-RUN docker-php-ext-install \
-    opcache \
-    pdo_mysql \
-    mysqli \
-    zip
-
-# Install composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Xdebug
 RUN pecl install xdebug \
