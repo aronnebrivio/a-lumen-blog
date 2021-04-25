@@ -55,6 +55,14 @@ class CommentController extends BaseController
         return $this->getOne($comment->id);
     }
 
+    /**
+     * @param Request    $request
+     * @param int|string $id
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     *
+     * @return Comment
+     */
     public function update(Request $request, $id)
     {
         $comment = Comment::findOrFail($id);
@@ -68,13 +76,15 @@ class CommentController extends BaseController
     }
 
     /**
-     * @param $id
+     * @param int|string $id
      *
      * @throws \Exception
      *
      * @return array
+     *
+     * @psalm-return array<empty, empty>
      */
-    public function delete($id)
+    public function delete($id): array
     {
         $comment = Comment::findOrFail($id);
 
@@ -85,6 +95,13 @@ class CommentController extends BaseController
         return [];
     }
 
+    /**
+     * @param int|string $id
+     *
+     * @throws \Exception
+     *
+     * @return Comment
+     */
     private function getOne($id)
     {
         return Comment::findOrFail($id);

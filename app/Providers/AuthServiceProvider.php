@@ -20,8 +20,10 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Boot the authentication services for the application.
+     *
+     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Gate::policy(Post::class, PostPolicy::class);
         Gate::policy(Comment::class, CommentPolicy::class);

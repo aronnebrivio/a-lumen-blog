@@ -18,7 +18,9 @@ class UserFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return string[]
+     *
+     * @psalm-return array{first_name: string, last_name: string, email: string, password: string}
      */
     public function definition()
     {

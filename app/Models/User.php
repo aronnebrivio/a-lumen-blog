@@ -16,30 +16,45 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authorizable;
     use HasFactory;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'email',
         'first_name',
         'last_name',
     ];
 
+    /**
+     * @var array
+     */
     protected $hidden = [
         'password',
         'updated_at',
     ];
 
+    /**
+     * @var array
+     */
     protected $guarded = [
         'id',
         'created_at',
     ];
 
+    /**
+     * @var array
+     */
     protected $appends = [
         'full_name',
     ];
 
+    /**
+     * @var string
+     */
     protected $table = 'users';
 
     // mutators
-    public function getFullNameAttribute()
+    public function getFullNameAttribute(): string
     {
         if ($this->attributes['first_name'] && $this->attributes['last_name']) {
             return $this->attributes['first_name'] . ' ' . $this->attributes['last_name'];
@@ -49,12 +64,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     }
 
     // relationships
-    public function posts()
+    public function posts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Post::class, 'user_id', 'id');
     }
 
-    public function comments()
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Comment::class, 'user_id', 'id');
     }
@@ -73,6 +88,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
+     *
+     * @psalm-return array<empty, empty>
      */
     public function getJWTCustomClaims()
     {

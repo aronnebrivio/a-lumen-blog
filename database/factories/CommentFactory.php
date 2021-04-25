@@ -17,7 +17,9 @@ class CommentFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return string[]
+     *
+     * @psalm-return array{text: string}
      */
     public function definition()
     {
