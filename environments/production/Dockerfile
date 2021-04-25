@@ -32,8 +32,8 @@ RUN composer install
 RUN php artisan migrate --force
 
 # Clean
-RUN rm -rf .github .vscode database environments private tests \
-    .dockerignore .gitignore .php_cs.dist artisan captainhook.json Dockerfile docker-compose.yml phpunit.xml
+RUN rm -rf .git .github .vscode database environments private tests \
+    .dockerignore .gitignore .php_cs.dist artisan captainhook.json composer.json composer.lock Dockerfile docker-compose.yml LICENSE phpunit-printer.yml phpunit.xml psalm.xml README.md
 
 # Change ownership of our applications
 RUN chown -R www-data:www-data $APP_HOME
