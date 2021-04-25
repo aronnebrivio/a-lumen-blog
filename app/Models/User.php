@@ -16,26 +16,41 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authorizable;
     use HasFactory;
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'email',
         'first_name',
         'last_name',
     ];
 
+    /**
+     * @var array
+     */
     protected $hidden = [
         'password',
         'updated_at',
     ];
 
+    /**
+     * @var array
+     */
     protected $guarded = [
         'id',
         'created_at',
     ];
 
+    /**
+     * @var array
+     */
     protected $appends = [
         'full_name',
     ];
 
+    /**
+     * @var string
+     */
     protected $table = 'users';
 
     // mutators
@@ -73,6 +88,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * Return a key value array, containing any custom claims to be added to the JWT.
      *
      * @return array
+     *
+     * @psalm-return array<empty, empty>
      */
     public function getJWTCustomClaims()
     {

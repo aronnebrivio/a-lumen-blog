@@ -4,10 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Classes\ParseInputStream;
+use Illuminate\Http\Request;
 
 class ParseMultipartFormDataInputForNonPostRequestsMiddleware
 {
-    /*
+    /**
      * Content-Type: multipart/form-data - only works for POST requests. All others fail, this is a bug in PHP since 2011.
      * See comments here: https://github.com/laravel/framework/issues/13457
      *
@@ -18,16 +19,16 @@ class ParseMultipartFormDataInputForNonPostRequestsMiddleware
      * @param  \Illuminate\Http\Request $request
      * @param  \Closure $next
      * @return mixed
-     */
-    public function handle($request, Closure $next)
+     **/
+    public function handle(Request $request, Closure $next)
     {
         if ($request->method() == 'POST' or $request->method() == 'GET') {
             return $next($request);
         }
 
         if (
-            preg_match('/multipart\/form-data/', $request->headers->get('Content-Type')) or
-            preg_match('/multipart\/form-data/', $request->headers->get('content-type'))
+            preg_match('/multipart\/form-data/', $request->headers->get('Content-Type') ?? '') or
+            preg_match('/multipart\/form-data/', $request->headers->get('content-type') ?? '')
         ) {
             $params = [];
             new ParseInputStream($params);

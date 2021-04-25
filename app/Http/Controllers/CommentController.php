@@ -56,7 +56,7 @@ class CommentController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request    $request
      * @param int|string $id
      *
      * @throws \Illuminate\Validation\ValidationException
@@ -81,8 +81,10 @@ class CommentController extends BaseController
      * @throws \Exception
      *
      * @return array
+     *
+     * @psalm-return array<empty, empty>
      */
-    public function delete($id)
+    public function delete($id): array
     {
         $comment = Comment::findOrFail($id);
 

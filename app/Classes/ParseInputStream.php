@@ -177,7 +177,9 @@ class ParseInputStream
      *
      * @param $string string
      *
-     * @return array
+     * @return string[]
+     *
+     * @psalm-return array<array-key|string, string>
      */
     private function file(string $string): array
     {
@@ -194,9 +196,11 @@ class ParseInputStream
      * @param $string
      * @param mixed $data
      *
-     * @return array
+     * @return UploadedFile[]
+     *
+     * @psalm-return array<string, UploadedFile>
      */
-    private function file_stream($data)
+    private function file_stream($data): array
     {
         $result = [];
         $data = ltrim($data);
@@ -234,7 +238,6 @@ class ParseInputStream
             }
 
             if (substr($data, -2) === "\r\n") {
-                $data = substr($data, 0, -2);
             }
 
             $path = sys_get_temp_dir() . '/php' . substr(sha1((string)rand()), 0, 6);
@@ -255,9 +258,11 @@ class ParseInputStream
      *
      * @param $string
      *
-     * @return array
+     * @return (string|string[])[]
+     *
+     * @psalm-return array<string, non-empty-list<string>|string>
      */
-    private function parameter($string)
+    private function parameter(string $string): array
     {
         $data = [];
 
@@ -272,62 +277,9 @@ class ParseInputStream
         return $data;
     }
 
-    /**
-     * @function merge
-     *
-     * @param $array array
-     * Ugly ugly ugly
-     *
-     * @return ((array|mixed)[]|mixed)[][]
-     *
-     * @psalm-return array{parameters: array<array-key, mixed|non-empty-list<mixed>>, files: array<array-key, array<array-key, mixed|non-empty-list<mixed>>>}
-     */
-    private function merge($array): array
-    {
-        $results = [
-            'parameters' => [],
-            'files' => [],
-        ];
-
-        if (count($array['parameters']) > 0) {
-            foreach ($array['parameters'] as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (is_array($v)) {
-                        foreach ($v as $kk => $vv) {
-                            $results['parameters'][$k][] = $vv;
-                        }
-                    } else {
-                        $results['parameters'][$k] = $v;
-                    }
-                }
-            }
-        }
-
-        if (count($array['files']) > 0) {
-            foreach ($array['files'] as $key => $value) {
-                foreach ($value as $k => $v) {
-                    if (is_array($v)) {
-                        foreach ($v as $kk => $vv) {
-                            if (is_array($vv) && (count($vv) === 1)) {
-                                $results['files'][$k][$kk] = $vv[0];
-                            } else {
-                                $results['files'][$k][$kk][] = $vv[0];
-                            }
-                        }
-                    } else {
-                        $results['files'][$k][$key] = $v;
-                    }
-                }
-            }
-        }
-
-        return $results;
-    }
-
     public function parse_parameter(array &$params, string $parameter, $value): void
     {
         if (strpos($parameter, '[') !== false) {
-            $matches = [];
             if (preg_match('/^([^[]*)\[([^]]*)\](.*)$/', $parameter, $match)) {
                 $name = $match[1];
                 $key = $match[2];

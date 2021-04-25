@@ -76,8 +76,10 @@ class PostController extends BaseController
      * @throws \Exception
      *
      * @return array
+     *
+     * @psalm-return array<empty, empty>
      */
-    public function delete($id)
+    public function delete($id): array
     {
         $post = Post::findOrFail($id);
 
