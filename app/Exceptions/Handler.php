@@ -2,9 +2,9 @@
 
 namespace App\Exceptions;
 
-use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\App;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -38,7 +38,7 @@ class Handler extends ExceptionHandler
     {
         // Ignoring this block because only applies on production environment
         // @codeCoverageIgnoreStart
-        if (app()->environment() === 'production' && app()->bound('sentry') && $this->shouldReport($e)) {
+        if (App::environment(['production']) && app()->bound('sentry') && $this->shouldReport($e)) {
             app('sentry')->captureException($e);
         }
         // @codeCoverageIgnoreEnd

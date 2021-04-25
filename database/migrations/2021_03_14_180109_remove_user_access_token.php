@@ -8,8 +8,6 @@ class RemoveUserAccessToken extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -20,13 +18,11 @@ class RemoveUserAccessToken extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('token', 64)->after('password');
+            $table->string('token', 64)->nullable()->after('password');
         });
     }
 }
