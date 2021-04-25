@@ -2,6 +2,7 @@ FROM aronnebrivio/php:7.4-base
 
 # Fix permissions
 RUN chmod 1777 /tmp
+RUN chown -R www-data:www-data /var/www
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data
