@@ -35,6 +35,8 @@ jobs:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
           XDEBUG_MODE: coverage
+      - name: Run Psalm
+        run: ./vendor/bin/psalm --shepherd --show-info=false --stats
       - name: "Send code coverage report to Codecov.io"
         env:
           CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"

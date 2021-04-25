@@ -1,6 +1,7 @@
 # Blog backend
 [![CI/CD](https://github.com/aronnebrivio/a-lumen-blog/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/aronnebrivio/a-lumen-blog/actions/workflows/ci-cd.yml)
 [![codecov](https://codecov.io/gh/aronnebrivio/a-lumen-blog/branch/master/graph/badge.svg?token=WRQFZ18B0F)](https://codecov.io/gh/aronnebrivio/a-lumen-blog)
+[![shepherd](https://shepherd.dev/github/aronnebrivio/a-lumen-blog/coverage.svg)](https://shepherd.dev/github/aronnebrivio/a-lumen-blog/coverage.svg)
 [![LICENSE](https://img.shields.io/badge/license-MIT-gold.svg)](https://github.com/aronnebrivio/aronnebrivio.github.io/blob/master/LICENSE)
 
 [Lumen](https://lumen.laravel.com/) project providing an API to a blog environment, with Users, Posts and Comments.
