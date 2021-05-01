@@ -1,0 +1,6 @@
+services:
+  composernormalize:
+    version: latest
+  phpcsfixer:
+    version: latest
+    config_path: .php_cs.dist
