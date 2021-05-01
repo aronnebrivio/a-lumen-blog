@@ -37,10 +37,11 @@ jobs:
           XDEBUG_MODE: coverage
       - name: Run Psalm
         run: ./vendor/bin/psalm --shepherd --show-info=false --stats
-      - name: "Send code coverage report to Codecov.io"
-        env:
-          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
-        run: "bash <(curl -s https://codecov.io/bash) || true"
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
 
   deploy:
     runs-on: ubuntu-latest
