@@ -29,8 +29,8 @@ jobs:
         run: php artisan migrate
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-      - name: Run PHPUnit
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Run PHPUnit tests
+        run: composer test:ci
         env:
           DB_PORT: ${{ job.services.mysql.ports['3306'] }}
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
