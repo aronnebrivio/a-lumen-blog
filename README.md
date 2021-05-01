@@ -27,9 +27,14 @@ You can enable or disable XDebug using the `XDEBUG_MODE` environment variable.
 ## Test
 Tests are under `/tests` folder, run it with `phpunit`:   
 ```bash
-docker-compose run --rm blog-lumen /var/www/html/vendor/bin/phpunit --coverage-html /tmp --colors=always -c /var/www/html/phpunit.xml --testsuite 'Application Test Suite'
+docker-compose run --rm blog-lumen bash -c "composer test"
 ```
 
+Or, if you like **coverage**:
+```bash
+docker-compose run --rm blog-lumen bash -c "composer test:coverage"
+```
+PHPUnit coverage report will be accessible at `private/tmp/index.html`. 
 
 ## ToDo
 - [x] Upgrade to Lumen 8.x
@@ -41,8 +46,8 @@ docker-compose run --rm blog-lumen /var/www/html/vendor/bin/phpunit --coverage-h
 - [x] Use Github workflow
 - [x] Setup a simple production environment  
 - [x] Containerized infrastructure for server
-- [ ] Makefile
 - [ ] Pagination
+- [ ] Notifications
 
 ## License
 Copyright (c) 2020 Aronne Brivio. Released under the MIT License. See [LICENSE](https://github.com/aronnebrivio/a-lumen-blog/blob/master/LICENSE) for details.
