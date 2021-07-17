@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Post;
 use App\Policies\CommentPolicy;
 use App\Policies\PostPolicy;
-use App\Models\Post;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,8 +20,6 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * Boot the authentication services for the application.
-     *
-     * @return void
      */
     public function boot(): void
     {
