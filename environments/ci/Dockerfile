@@ -1,4 +1,4 @@
-FROM aronnebrivio/php:7.4-base
+FROM aronnebrivio/php:8.0-base
 
 # Change uid and gid of apache to docker user uid/gid
 RUN usermod -u 1000 www-data && groupmod -g 1000 www-data

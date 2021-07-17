@@ -1,4 +1,4 @@
-FROM aronnebrivio/php:7.4-base
+FROM aronnebrivio/php:8.0-base
 
 ENV APP_HOME /var/www/html
 
@@ -33,7 +33,7 @@ RUN php artisan migrate --force
 
 # Clean
 RUN rm -rf .git .github .vscode database environments private tests \
-    .dockerignore .gitignore .php_cs.dist artisan captainhook.json composer.json composer.lock Dockerfile docker-compose.yml LICENSE phpunit-printer.yml phpunit.xml psalm.xml README.md
+    .gitignore .php_cs.dist artisan captainhook.json composer.json composer.lock Dockerfile docker-compose.yml LICENSE phpunit-printer.yml phpunit.xml psalm.xml README.md
 
 # Change ownership of our applications
 RUN chown -R www-data:www-data $APP_HOME
