@@ -4,6 +4,9 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Str;
 
+/**
+ * @internal
+ */
 class MultipartFormDataTest extends TestCase
 {
     public function testMultipartPutRequest()

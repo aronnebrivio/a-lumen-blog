@@ -1,6 +1,7 @@
 <?php
 
 return PhpCsFixer\Config::create()
+    ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
         'blank_line_before_statement' => ['statements' => [
