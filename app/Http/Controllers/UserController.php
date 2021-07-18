@@ -64,7 +64,7 @@ class UserController extends BaseController
      *
      * @throws \Illuminate\Validation\ValidationException
      *
-     * @return User|\Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory
+     * @return \Illuminate\Http\Response|\Laravel\Lumen\Http\ResponseFactory|User
      */
     public function update(Request $request, $id)
     {

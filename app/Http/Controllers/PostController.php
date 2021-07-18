@@ -51,7 +51,7 @@ class PostController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param Request    $request
      * @param int|string $id
      *
      * @throws \Exception
