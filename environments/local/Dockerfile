@@ -1,4 +1,4 @@
-FROM aronnebrivio/php:7.4-base
+FROM aronnebrivio/php:8.0-base
 
 # Fix permissions
 RUN chmod 1777 /tmp
