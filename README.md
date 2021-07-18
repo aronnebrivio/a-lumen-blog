@@ -48,6 +48,7 @@ PHPUnit coverage report will be accessible at `private/tmp/index.html`.
 - [x] Containerized infrastructure for server
 - [ ] Pagination
 - [ ] Notifications
+- [x] Upgrade to PHP 8.0
 
 ## License
 Copyright (c) 2020 Aronne Brivio. Released under the MIT License. See [LICENSE](https://github.com/aronnebrivio/a-lumen-blog/blob/master/LICENSE) for details.
