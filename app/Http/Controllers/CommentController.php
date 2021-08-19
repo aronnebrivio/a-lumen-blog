@@ -12,38 +12,34 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class CommentController extends BaseController
 {
     /**
-     * @param Request $request
+     * @param Request    $request
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
      * @return mixed
      */
-    public function getAll(Request $request)
+    public function getAll(Request $request, $postId)
     {
-        $this->validate($request, [
-            'post_id' => 'required|integer|min:1',
-        ]);
-
-        return Comment::where('post_id', $request->all()['post_id'])
+        return Comment::where('post_id', $postId)
             ->orderBy('created_at', 'desc')
             ->get();
     }
 
     /**
-     * @param Request $request
+     * @param Request    $request
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
      * @return Comment
      */
-    public function new(Request $request)
+    public function new(Request $request, $postId)
     {
         $this->validate($request, [
             'text' => 'required',
-            'post_id' => 'required',
         ]);
 
-        $postId = $request->all()['post_id'];
         Post::findOrFail($postId);
 
         $comment = new Comment();
@@ -58,13 +54,16 @@ class CommentController extends BaseController
     /**
      * @param Request    $request
      * @param int|string $id
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
      * @return Comment
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $postId, $id)
     {
+        Post::findOrFail($postId);
+
         $comment = Comment::findOrFail($id);
 
         Gate::authorize('update', $comment);
@@ -77,6 +76,7 @@ class CommentController extends BaseController
 
     /**
      * @param int|string $id
+     * @param int|string $postId
      *
      * @throws \Exception
      *
@@ -84,8 +84,10 @@ class CommentController extends BaseController
      *
      * @psalm-return array<empty, empty>
      */
-    public function delete($id): array
+    public function delete($postId, $id)
     {
+        Post::findOrFail($postId);
+
         $comment = Comment::findOrFail($id);
 
         Gate::authorize('delete', $comment);
