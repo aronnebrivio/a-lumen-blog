@@ -12,8 +12,8 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class CommentController extends BaseController
 {
     /**
-     * @param Request $request
-     * @param mixed   $postId
+     * @param Request    $request
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
@@ -27,8 +27,8 @@ class CommentController extends BaseController
     }
 
     /**
-     * @param Request $request
-     * @param mixed   $postId
+     * @param Request    $request
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
@@ -54,7 +54,7 @@ class CommentController extends BaseController
     /**
      * @param Request    $request
      * @param int|string $id
-     * @param mixed      $postId
+     * @param int|string $postId
      *
      * @throws \Illuminate\Validation\ValidationException
      *
@@ -76,7 +76,7 @@ class CommentController extends BaseController
 
     /**
      * @param int|string $id
-     * @param mixed      $postId
+     * @param int|string $postId
      *
      * @throws \Exception
      *
