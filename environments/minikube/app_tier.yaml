@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-tier
+  labels:
+    app: blog
+spec:
+  ports:
+    - port: 80
+  selector:
+    tier: app
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-tier
+  labels:
+    app: blog
+    tier: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blog
+      tier: app
+  template:
+    metadata:
+      labels:
+        app: blog
+        tier: app
+    spec:
+      containers:
+        - name: server
+          image: aronnebrivio/php:8.0-k8s
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80
+              name: server
+          env:
+            - name: DB_HOST
+              value: $(DATA_TIER_SERVICE_HOST)
+            - name: DB_PORT
+              value: $(DATA_TIER_SERVICE_PORT_MYSQL)
+            - name: REDIS_HOST
+              value: $(DATA_TIER_SERVICE_HOST)
+            - name: REDIS_PORT
+              value: $(DATA_TIER_SERVICE_PORT_REDIS)
+      initContainers:
+        - name: database-migrations
+          image: aronnebrivio/php:8.0-k8s
+          imagePullPolicy: Never
+          env:
+            - name: DB_HOST
+              value: $(DATA_TIER_SERVICE_HOST)
+            - name: DB_PORT
+              value: $(DATA_TIER_SERVICE_PORT_MYSQL)
+            - name: REDIS_HOST
+              value: $(DATA_TIER_SERVICE_HOST)
+            - name: REDIS_PORT
+              value: $(DATA_TIER_SERVICE_PORT_REDIS)
+          command:
+            - /bin/sh
+            - -c
+            - "cd /var/www/html && php artisan migrate:fresh --seed"
