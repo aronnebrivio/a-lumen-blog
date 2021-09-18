@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: lumen-api
+  labels:
+    app: blog
+spec:
+  ports:
+    - port: 80
+  selector:
+    tier: app
+  externalTrafficPolicy: Local
+  type: LoadBalancer

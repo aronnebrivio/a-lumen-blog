@@ -1,21 +1,7 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: app-tier
-  labels:
-    app: blog
-spec:
-  ports:
-    - port: 80
-  selector:
-    tier: app
-  externalTrafficPolicy: Local
-  type: LoadBalancer
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-tier
+  name: lumen-api
   labels:
     app: blog
     tier: app
@@ -32,34 +18,38 @@ spec:
         tier: app
     spec:
       containers:
-        - name: server
+        - name: api
           image: aronnebrivio/php:8.0-k8s
           imagePullPolicy: Never
           ports:
             - containerPort: 80
-              name: server
+              name: api
           env:
             - name: DB_HOST
-              value: $(DATA_TIER_SERVICE_HOST)
+              value: $(MYSQL_SERVICE_HOST)
+            - name: DB_HOST_READONLY
+              value: $(MYSQL_READ_SERVICE_HOST)
             - name: DB_PORT
-              value: $(DATA_TIER_SERVICE_PORT_MYSQL)
+              value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
-              value: $(DATA_TIER_SERVICE_HOST)
+              value: $(REDIS_SERVICE_HOST)
             - name: REDIS_PORT
-              value: $(DATA_TIER_SERVICE_PORT_REDIS)
+              value: $(REDIS_SERVICE_PORT)
       initContainers:
         - name: database-migrations
           image: aronnebrivio/php:8.0-k8s
           imagePullPolicy: Never
           env:
             - name: DB_HOST
-              value: $(DATA_TIER_SERVICE_HOST)
+              value: $(MYSQL_SERVICE_HOST)
+            - name: DB_HOST_READONLY
+              value: $(MYSQL_READ_SERVICE_HOST)
             - name: DB_PORT
-              value: $(DATA_TIER_SERVICE_PORT_MYSQL)
+              value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
-              value: $(DATA_TIER_SERVICE_HOST)
+              value: $(REDIS_SERVICE_HOST)
             - name: REDIS_PORT
-              value: $(DATA_TIER_SERVICE_PORT_REDIS)
+              value: $(REDIS_SERVICE_PORT)
           command:
             - /bin/sh
             - -c
