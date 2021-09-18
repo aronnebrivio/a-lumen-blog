@@ -28,7 +28,7 @@ spec:
             - name: DB_HOST
               value: $(MYSQL_SERVICE_HOST)
             - name: DB_HOST_READONLY
-              value: $(MYSQL_READ_SERVICE_HOST)
+              value: $(MYSQL_RO_SERVICE_HOST)
             - name: DB_PORT
               value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
@@ -43,7 +43,7 @@ spec:
             - name: DB_HOST
               value: $(MYSQL_SERVICE_HOST)
             - name: DB_HOST_READONLY
-              value: $(MYSQL_READ_SERVICE_HOST)
+              value: $(MYSQL_RO_SERVICE_HOST)
             - name: DB_PORT
               value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
@@ -51,6 +51,6 @@ spec:
             - name: REDIS_PORT
               value: $(REDIS_SERVICE_PORT)
           command:
-            - /bin/sh
-            - -c
+            - bash
+            - "-c"
             - "cd /var/www/html && php artisan migrate:fresh --seed"
