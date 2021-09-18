@@ -28,7 +28,7 @@ spec:
             - name: DB_HOST
               value: $(MYSQL_SERVICE_HOST)
             - name: DB_HOST_READONLY
-              value: $(MYSQL_READ_SERVICE_HOST)
+              value: $(MYSQL_RO_SERVICE_HOST)
             - name: DB_PORT
               value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
@@ -36,6 +36,19 @@ spec:
             - name: REDIS_PORT
               value: $(REDIS_SERVICE_PORT)
       initContainers:
+        - name: init-wait
+          image: alpine
+          env:
+            - name: DB_HOST
+              value: $(MYSQL_SERVICE_HOST)
+            - name: DB_PORT
+              value: $(MYSQL_SERVICE_PORT)
+          command:
+            - sh
+            - "-c"
+            - |
+            - echo "Connecting to $DB_HOST $DB_PORT ..."
+            - "for i in $(seq 1 300); do nc -zvw1 $DB_HOST $DB_PORT && exit 0 || sleep 3; done; exit 1"
         - name: database-migrations
           image: aronnebrivio/php:8.0-k8s
           imagePullPolicy: Never
@@ -43,7 +56,7 @@ spec:
             - name: DB_HOST
               value: $(MYSQL_SERVICE_HOST)
             - name: DB_HOST_READONLY
-              value: $(MYSQL_READ_SERVICE_HOST)
+              value: $(MYSQL_RO_SERVICE_HOST)
             - name: DB_PORT
               value: $(MYSQL_SERVICE_PORT)
             - name: REDIS_HOST
@@ -51,6 +64,8 @@ spec:
             - name: REDIS_PORT
               value: $(REDIS_SERVICE_PORT)
           command:
-            - /bin/sh
-            - -c
+            - bash
+            - "-c"
+            - |
+            - env
             - "cd /var/www/html && php artisan migrate:fresh --seed"

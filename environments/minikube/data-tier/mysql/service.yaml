@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql
+  name: mysql-rw
   labels:
     app: blog
 spec:
@@ -18,7 +18,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-read
+  name: mysql-ro
   labels:
     app: blog
 spec:
@@ -27,3 +27,17 @@ spec:
       port: 3306
   selector:
     app: blog
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: blog
+spec:
+  ports:
+    - port: 3306
+  selector:
+    tier: app
+  externalTrafficPolicy: Local
+  type: LoadBalancer
