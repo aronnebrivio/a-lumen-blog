@@ -12,7 +12,7 @@ $router->get('', function () {
 });
 
 $router->get('version', function () {
-    return response('1.1.6', 200);
+    return response('1.1.7', 200);
 });
 
 $router->group(['prefix' => 'auth'], function () use ($router) {
