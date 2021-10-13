@@ -11,6 +11,7 @@ class MultipartFormDataTest extends TestCase
 {
     public function testMultipartPutRequest()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $post = Post::factory()->create([
             'user_id' => $user->id,
