@@ -69,6 +69,7 @@ class UserTest extends TestCase
 
     public function testUserCoverage()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $post = Post::factory()->create([
@@ -97,6 +98,9 @@ class UserTest extends TestCase
         $this->post('auth/register', ['email' => 'test@email.com'])
             ->seeStatusCode(422);
 
+        $this->post('auth/register', ['email' => 'test@email.com', 'password' => 'password', 'picture' => 'test'])
+            ->seeStatusCode(422);
+
         $this->post('auth/register', ['email' => 'test@email.com', 'password' => 'password'])
             ->seeStatusCode(200);
     }
@@ -106,6 +110,8 @@ class UserTest extends TestCase
         User::factory()->create([
             'email' => 'test@email.com',
         ]);
+
+        /** @var User $user */
         $user = User::factory()->create();
 
         $this->actingAs($user);
@@ -113,6 +119,9 @@ class UserTest extends TestCase
             ->seeStatusCode(422);
 
         $this->put('users/' . $user->id, ['email' => 'test'])
+            ->seeStatusCode(422);
+
+        $this->put('users/' . $user->id, ['picture' => 'test'])
             ->seeStatusCode(422);
 
         $this->put('users/' . $user->id, ['email' => 'test@email.com'])

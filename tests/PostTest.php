@@ -43,6 +43,7 @@ class PostTest extends TestCase
 
     public function testPostEdit()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $post = Post::factory()->create([
@@ -73,6 +74,7 @@ class PostTest extends TestCase
 
     public function testPostDelete()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $post = Post::factory()->create([
@@ -100,6 +102,7 @@ class PostTest extends TestCase
 
     public function testPostNew()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $sampleText = Str::random(300);
 
@@ -115,6 +118,7 @@ class PostTest extends TestCase
 
     public function testPostCoverage()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $post = Post::factory()->create([
@@ -126,6 +130,7 @@ class PostTest extends TestCase
 
     public function testPostNewValidation()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 
