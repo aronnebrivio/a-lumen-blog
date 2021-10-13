@@ -46,6 +46,7 @@ class UserController extends BaseController
             'password' => 'required|string|min:6',
             'first_name' => 'filled|string',
             'last_name' => 'filled|string',
+            'picture' => 'filled|url',
         ]);
 
         $data = $request->all();
@@ -73,6 +74,7 @@ class UserController extends BaseController
             'first_name' => 'filled|string',
             'last_name' => 'filled|string',
             'password' => 'filled|string|min:6',
+            'picture' => 'filled|url',
         ]);
 
         if ($this->emailExists($request->input('email'))) {

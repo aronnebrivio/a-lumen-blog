@@ -31,6 +31,7 @@ class CommentTest extends TestCase
 
     public function testCommentEdit()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $post = Post::factory()->create([
@@ -74,6 +75,7 @@ class CommentTest extends TestCase
 
     public function testCommentDelete()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $user2 = User::factory()->create();
         $post = Post::factory()->create([
@@ -109,6 +111,7 @@ class CommentTest extends TestCase
 
     public function testCommentNew()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $post = Post::factory()->create([
             'user_id' => $user->id,
@@ -130,6 +133,7 @@ class CommentTest extends TestCase
 
     public function testCommentCoverage()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $post = Post::factory()->create([
@@ -147,6 +151,7 @@ class CommentTest extends TestCase
 
     public function testCommentNewValidation()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
         $post = Post::factory()->create([

@@ -56,6 +56,7 @@ class AuthTest extends TestCase
 
     public function testMe()
     {
+        /** @var User $user */
         $user = User::factory()->create();
         $this->actingAs($user);
 

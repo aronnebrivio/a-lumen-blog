@@ -13,8 +13,8 @@ class CommentPolicy
     /**
      * Determine if the given comment can be updated by the user.
      *
-     * @param User  $user
-     * @param Comment  $comment
+     * @param User    $user
+     * @param Comment $comment
      *
      * @return Response
      */
@@ -28,8 +28,8 @@ class CommentPolicy
     /**
      * Determine if the given comment can be deleted by the user.
      *
-     * @param User  $user
-     * @param Comment  $comment
+     * @param User    $user
+     * @param Comment $comment
      *
      * @return Response
      */
