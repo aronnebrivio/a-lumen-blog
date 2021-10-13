@@ -74,6 +74,7 @@ $app->configure('app');
 
 $app->middleware([
     App\Http\Middleware\ParseMultipartFormDataInputForNonPostRequestsMiddleware::class,
+    App\Http\Middleware\CorsMiddleware::class,
 ]);
 
 $app->routeMiddleware([
