@@ -3,7 +3,7 @@
 use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 /**
  * @internal

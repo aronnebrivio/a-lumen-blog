@@ -95,7 +95,7 @@ $app->routeMiddleware([
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Sentry\Laravel\ServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
-$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+$app->register(PHPOpenSourceSaver\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
